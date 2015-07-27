@@ -45,6 +45,7 @@
         
         dispatch_semaphore_t completionSemaphore = dispatch_semaphore_create(0);
         ConnectionService *service = [ConnectionService sharedService];
+        //NSLog(@"request: %@", keys);
         for (NSString *key in keys) {
             NSString *identifier = [service addDataTaskWithURL:[NSURL URLWithString: key] completionHandler:^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
                 [lock lock];
@@ -53,6 +54,7 @@
                 } else if (response.statusCode < 200 || response.statusCode >= 300 ) {
                     [errors setObject:[ConnectionService createErrorWithHttpStatus:response.statusCode] forKey:key];
                 } else {
+                    //NSLog(@"create ImageWrapper: %@", key);
                     ImageWrapper *image = [[ImageWrapper alloc] initWithData:data cacheGroupName:(useStorage ? name : nil) url:key timestamp:nil];
                     NSNumber *cost = [NSNumber numberWithUnsignedInteger:[data length]];
                     [values setObject:image forKey:key];

@@ -34,9 +34,12 @@ const NSTimeInterval kUserLookupApiRateLimit = 5.0;
             MyTweet *tweet = [[MyTweet alloc] initWithDictionary:dic];
             [tweetArray addObject:tweet];
             
-            NSDictionary *user = [dic objectForKey:@"user"];
-            NSString *userId = [user objectForKey:@"id_str"];
-            [userSet addObject:userId];
+            //NSDictionary *user = [dic objectForKey:@"user"];
+            //NSString *userId = [user objectForKey:@"id_str"];
+            [userSet addObject:tweet.userId];
+            if (tweet.retweet) {
+                [userSet addObject:tweet.retweet.userId];
+            }
         }
         *error = nil;
         *set = userSet;
@@ -88,6 +91,7 @@ const NSTimeInterval kUserLookupApiRateLimit = 5.0;
         
         self.account = account;
         self.userCache = [self createUserCache];
+        self.lastAccessed = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -187,9 +191,13 @@ const NSTimeInterval kUserLookupApiRateLimit = 5.0;
             NSMutableSet *userSet = nil;
             NSMutableArray *tweetArray = [APIService parseTweetArrayWithData:data userset:&userSet error:&errorForHandler];
             if (!errorForHandler && tweetArray && userSet) {
-                [weakSelf.userCache prefetchWithKeys:[userSet allObjects] forceReloading:YES completion:^{
+                if (userSet.count > 0) {
+                    [weakSelf.userCache prefetchWithKeys:[userSet allObjects] forceReloading:YES completion:^{
+                        handler(tweetArray, errorForHandler);
+                    }];
+                } else {
                     handler(tweetArray, errorForHandler);
-                }];
+                }
                 return;
             }
         }

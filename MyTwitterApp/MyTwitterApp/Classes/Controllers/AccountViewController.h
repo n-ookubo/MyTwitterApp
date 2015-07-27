@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  AccountViewController.h
 //  MyTwitterApp
 //
 //  Created by 大久保直昭 on 2015/07/27.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface AccountViewController : UITableViewController
 
 @end
-

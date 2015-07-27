@@ -20,6 +20,8 @@ typedef NS_ENUM(NSUInteger, kTimelineObjectType) {
 typedef void(^TimelineServiceLoadCompletionHandler) (NSUInteger startIndex, NSUInteger length, NSError *error);
 
 @interface TimelineService : NSObject
+@property (copy, readonly) NSString *timelineUserId;
+
 - (instancetype) __unavailable init;
 - (instancetype)initWithAPIService:(APIService *)service timelineUserId:(NSString *)userId;
 

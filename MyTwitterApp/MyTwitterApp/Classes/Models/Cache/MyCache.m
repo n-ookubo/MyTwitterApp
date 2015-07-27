@@ -81,24 +81,29 @@
         return;
     }
     
+    BOOL mshrCreated = NO;
+    
     [mshrLock lock];
     MyCacheMSHR *mshr = [mshrDictionary objectForKey:key];
     if (!mshr) {
         mshr = [[MyCacheMSHR alloc] initWithKey:key cancelHandler:missCancelHandler queue:myCacheDispatchQueue];
         [mshrDictionary setValue:mshr forKey:key];
+        mshrCreated = YES;
     }
     
     if (handler) {
         [mshr addHandler:handler owner:owner];
     }
-    
-    NSArray *keys = @[key];
-    dispatch_async(myCacheDispatchQueue, ^{
-        requestHandler(keys, ^(NSDictionary *values, NSDictionary *costs, NSDictionary *errors) {
-            [self handleMissResponseHandlerWithKeys:keys values:values costs:costs errors:errors];
-        });
-    });
     [mshrLock unlock];
+    
+    if (mshrCreated) {
+        NSArray *keys = @[key];
+        dispatch_async(myCacheDispatchQueue, ^{
+            requestHandler(keys, ^(NSDictionary *values, NSDictionary *costs, NSDictionary *errors) {
+                [self handleMissResponseHandlerWithKeys:keys values:values costs:costs errors:errors];
+            });
+        });
+    }
 }
 
 - (void)prefetchWithKeys:(NSArray *)keys forceReloading:(BOOL)reloading completion:(void (^)(void))handler
@@ -115,23 +120,26 @@
     }
     
     [mshrLock lock];
+    NSMutableArray *unRequestedKeys = [[NSMutableArray alloc] init];
     for (NSString *key in uncachedKeys) {
         if (![mshrDictionary objectForKey:key]) {
             MyCacheMSHR *mshr = [[MyCacheMSHR alloc] initWithKey:key cancelHandler:missCancelHandler queue:myCacheDispatchQueue];
             [mshrDictionary setValue:mshr forKey:key];
+            [unRequestedKeys addObject:key];
         }
     }
     
-    void (^completionHandler)() = [handler copy];
-    dispatch_async(myCacheDispatchQueue, ^{
-        requestHandler(uncachedKeys, ^(NSDictionary *values, NSDictionary *costs, NSDictionary *errors) {
-            [self handleMissResponseHandlerWithKeys:uncachedKeys values:values costs:costs errors:errors];
-            if (completionHandler) {
-                dispatch_async(dispatch_get_main_queue(), completionHandler);
-            }
+    if (unRequestedKeys.count > 0) {
+        void (^completionHandler)() = [handler copy];
+        dispatch_async(myCacheDispatchQueue, ^{
+            requestHandler(unRequestedKeys, ^(NSDictionary *values, NSDictionary *costs, NSDictionary *errors) {
+                [self handleMissResponseHandlerWithKeys:unRequestedKeys values:values costs:costs errors:errors];
+                if (completionHandler) {
+                    dispatch_async(dispatch_get_main_queue(), completionHandler);
+                }
+            });
         });
-    });
-
+    }
     [mshrLock unlock];
     
 }

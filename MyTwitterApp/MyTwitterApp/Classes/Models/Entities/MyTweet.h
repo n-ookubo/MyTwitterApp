@@ -17,5 +17,7 @@
 
 @property (weak, nonatomic) NSString *createdDateString;
 
+@property (strong, nonatomic) MyTweet *retweet;
+
 - (NSDate *)createdDate;
 @end

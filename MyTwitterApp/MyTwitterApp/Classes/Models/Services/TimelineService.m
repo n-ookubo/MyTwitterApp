@@ -16,7 +16,7 @@
 @end
 
 @implementation TimelineService
-const NSUInteger kLoadingTweetCountAtOnce = 20;
+const NSUInteger kLoadingTweetCountAtOnce = 40;
 
 - (instancetype)init
 {
@@ -137,9 +137,9 @@ const NSUInteger kLoadingTweetCountAtOnce = 20;
         return NO;
     }
     MyTweetJoint *joint = obj;
-    
+    __block NSMutableArray *timelineArray = self.timelineArray;
     void (^apiHandler)(NSArray *result, NSError *error) = ^(NSArray *result, NSError *error) {
-        NSUInteger startIndex = index; // insert to joint index
+        NSUInteger startIndex = [timelineArray indexOfObject:obj]; // insert to joint index
         NSUInteger count = 0;
         if (!error && result.count > 1) {
             NSMutableArray * array = [NSMutableArray arrayWithArray:result];
@@ -147,14 +147,14 @@ const NSUInteger kLoadingTweetCountAtOnce = 20;
             BOOL removeJoint = (array.count < kLoadingTweetCountAtOnce && joint.from);
             if (removeJoint) {
                 // Jointを破棄する
-                [self.timelineArray removeObjectAtIndex:index];
+                [timelineArray removeObjectAtIndex:index];
             } else {
                 // Jointの維持
                 joint.to = ((MyTweet *)[array lastObject]).tweetId;
             }
             count = array.count;
             NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(startIndex, count)];
-            [self.timelineArray insertObjects:array atIndexes:indexes];
+            [timelineArray insertObjects:array atIndexes:indexes];
             
             if (removeJoint) {
                 count--;

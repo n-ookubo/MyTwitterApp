@@ -7,16 +7,44 @@
 //
 
 #import "AppDelegate.h"
+#import "AccountService.h"
+#import "TwitterService.h"
 
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
-
+const NSString *kUserProfileImageCacheName = @"user_image";
+const NSString *kTweetImageCacheName = @"image";
+const int kUserProfileImageCacheCountLimit = 100;
+const int kTweetImageCacheTotalCostLimit = 1024 * 1024 * 16;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    [ConnectionService setConnectionLimit:2];
+    [ConnectionService setTimeoutInterval:60];
+    
+    self.userProfileImageCache = [[[MyImageCache alloc] initWithCacheName:(NSString *)kUserProfileImageCacheName useStorage:YES countLimit:/*[NSNumber numberWithInt:kUserProfileImageCacheCountLimit]*/nil totalCostLimit:nil] resumeCacheFromStorage];
+    self.tweetImageCache = [[[MyImageCache alloc] initWithCacheName:(NSString *)kTweetImageCacheName useStorage:YES countLimit:nil totalCostLimit:[NSNumber numberWithInt:kTweetImageCacheTotalCostLimit]] resumeCacheFromStorage];
+    
+    UIViewController *initalController = nil;
+    ACAccount *account = [[AccountService sharedService] defaultAccount];
+    if (account) {
+        // accountを用いてTwitterServiceを作成
+        TwitterService *twitterService = [[TwitterService alloc] initWithAccount:account];
+        self.twitterService = twitterService;
+        
+        initalController = [storyboard instantiateInitialViewController];
+    } else {
+        initalController = [storyboard instantiateViewControllerWithIdentifier:@"AccountSelect"];
+    }
+    self.window.rootViewController = initalController;
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 

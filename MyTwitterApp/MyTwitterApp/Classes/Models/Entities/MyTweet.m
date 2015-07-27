@@ -11,6 +11,11 @@
 @implementation MyTweet
 - (instancetype)initWithDictionary:(NSDictionary *)dic
 {
+    return [self initWithDictionary:dic extractRetweet:YES];
+}
+
+- (instancetype)initWithDictionary:(NSDictionary *)dic extractRetweet:(BOOL)extractRT
+{
     self = [super initWithDictionary:dic];
     if (self) {
         self.tweetId = [dic objectForKey:@"id_str"];
@@ -22,6 +27,13 @@
         self.entities = [dic objectForKey:@"entities"];
         
         self.createdDateString = [dic objectForKey:@"created_at"];
+        
+        if (extractRT) {
+            NSDictionary * retweeted = [dic objectForKey:@"retweeted_status"];
+            if (retweeted) {
+                self.retweet = [[MyTweet alloc] initWithDictionary:retweeted extractRetweet:NO];
+            }
+        }
     }
     return self;
 }
