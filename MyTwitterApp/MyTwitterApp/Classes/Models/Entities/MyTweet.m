@@ -9,6 +9,8 @@
 #import "MyTweet.h"
 
 @implementation MyTweet
+const NSString *kMediaLoadingSize = @"medium";
+
 - (instancetype)initWithDictionary:(NSDictionary *)dic
 {
     return [self initWithDictionary:dic extractRetweet:YES];
@@ -27,6 +29,20 @@
         self.entities = [dic objectForKey:@"entities"];
         
         self.createdDateString = [dic objectForKey:@"created_at"];
+        
+        NSArray *medias = [self.entities objectForKey:@"media"];
+        if (medias.count > 0) {
+            NSDictionary *media = [medias firstObject];
+            if ([[media objectForKey:@"type"] isEqualToString:@"photo"]) {
+                NSDictionary *mediaSizes = [media objectForKey:@"sizes"];
+                NSDictionary *loadingSize = [mediaSizes objectForKey:kMediaLoadingSize];
+                if (loadingSize) {
+                    self.mediaUrl = [NSString stringWithFormat:@"%@:%@", [media objectForKey:@"media_url"], kMediaLoadingSize];
+                    self.mediaWidth = [loadingSize objectForKey:@"w"];
+                    self.mediaHeight = [loadingSize objectForKey:@"h"];
+                }
+            }
+        }
         
         if (extractRT) {
             NSDictionary * retweeted = [dic objectForKey:@"retweeted_status"];

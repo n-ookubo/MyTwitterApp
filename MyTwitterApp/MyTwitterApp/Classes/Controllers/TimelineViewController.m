@@ -59,7 +59,7 @@ const CGFloat kTweetJointCellHeight = 40;
             }
         }];
     } else {
-        self.title = @"タイムライン";
+        self.title = @"ホーム";
     }
     
     UINib *tweetCellNib = [UINib nibWithNibName:(NSString *)kTweetCellNibName bundle:nil];
@@ -111,11 +111,13 @@ const CGFloat kTweetJointCellHeight = 40;
             CGPoint srcPt = [weakSelf.tableView contentOffset];
             [self.tableView reloadData];
             
-            NSIndexPath *oldTopIndex = [NSIndexPath indexPathForRow:length inSection:0];
-            UITableViewCell * cell = [weakSelf.tableView cellForRowAtIndexPath:oldTopIndex];
-            CGRect cellRect = cell.frame;
-            CGPoint destPt = CGPointMake(cellRect.origin.x, cellRect.origin.y + srcPt.y);
-            [weakSelf.tableView setContentOffset:destPt animated:NO];
+            if (length > 0) {
+                NSIndexPath *oldTopIndex = [NSIndexPath indexPathForRow:length inSection:0];
+                UITableViewCell * cell = [weakSelf.tableView cellForRowAtIndexPath:oldTopIndex];
+                CGRect cellRect = cell.frame;
+                CGPoint destPt = CGPointMake(cellRect.origin.x, cellRect.origin.y + srcPt.y);
+                [weakSelf.tableView setContentOffset:destPt animated:NO];
+            }
             
             [weakSelf.refreshControl endRefreshing];
         });

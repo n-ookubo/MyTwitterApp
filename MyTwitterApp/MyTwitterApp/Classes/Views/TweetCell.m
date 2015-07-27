@@ -12,6 +12,7 @@
 @interface TweetCell ()
 @property (weak, nonatomic) MyImageCache *profileImageCache;
 @property (weak, nonatomic) MyImageCache *tweetImageCache;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tweetImageAspectRatioConstraint;
 
 @end
 
@@ -38,6 +39,10 @@ static const CGFloat kTweetCellContentFontSize = 15.0;
     CGSize sizeWithFont = [content boundingRectWithSize:contentBox options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine attributes:[NSDictionary dictionaryWithObject:systemFont forKey:NSFontAttributeName] context:nil].size;
     
     CGFloat height = sizeWithFont.height + contentYMargin;
+    
+    if (tweet.mediaUrl) {
+        height += ((width - contentXMargin) * [tweet.mediaHeight doubleValue] / [tweet.mediaWidth doubleValue]) + margin;
+    }
     
     return MAX(ceil(height), profileHeight);
 }
@@ -99,6 +104,11 @@ static const CGFloat kTweetCellContentFontSize = 15.0;
         view.backgroundColor = [UIColor lightGrayColor];
     }];
     
+    [self.tweetImageView useActivityIndicator:YES];
+    [self.tweetImageView setPlaceholderHandler:^(UIImageView *view) {
+        view.backgroundColor = [UIColor lightGrayColor];
+    }];
+    
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     self.profileImageCache = delegate.userProfileImageCache;
     self.tweetImageCache = delegate.tweetImageCache;
@@ -150,6 +160,22 @@ static const CGFloat kTweetCellContentFontSize = 15.0;
         weakSelf.nameLabel.text = user.name;
         weakSelf.screenNameLabel.text = [NSString stringWithFormat:@"@%@", user.screenName];
         weakSelf.timeLabel.text = [TweetCell getStringWithTime:[tw createdDate]];
+        
+        UIImageView *img = weakSelf.tweetImageView;
+        if (tw.mediaUrl) {
+            NSLayoutConstraint *newConstraint = [NSLayoutConstraint constraintWithItem:img attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:img attribute:NSLayoutAttributeHeight multiplier:([tw.mediaWidth doubleValue] / [tw.mediaHeight doubleValue]) constant:0];
+            [img removeConstraint:weakSelf.tweetImageAspectRatioConstraint];
+            [img addConstraint:newConstraint];
+            weakSelf.tweetImageAspectRatioConstraint = newConstraint;
+            
+            [img setImageCache:weakSelf.tweetImageCache];
+            [img setViewImageWithURLString:tw.mediaUrl];
+            img.hidden = NO;
+        } else {
+            [img setImageCache:nil];
+            [img setViewImageWithURLString:nil];
+            img.hidden = YES;
+        }
         
         [weakSelf setContent:tw];
     }];
@@ -205,6 +231,10 @@ static const CGFloat kTweetCellContentFontSize = 15.0;
 {
     [self.profileImageView setImageCache:nil];
     [self.profileImageView setViewImageWithURLString:nil];
+    [self.tweetImageView setImageCache:nil];
+    [self.tweetImageView setViewImageWithURLString:nil];
+    self.tweetImageView.hidden = YES;
+    
     self.nameLabel.text = @"";
     self.screenNameLabel.text = @"";
     self.timeLabel.text = @"";

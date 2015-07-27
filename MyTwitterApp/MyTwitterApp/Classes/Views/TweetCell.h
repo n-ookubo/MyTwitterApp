@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *screenNameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet TTTAttributedLabel *contentLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *tweetImageView;
 
 @property (weak, nonatomic) MyTweet *selfTweet;
 

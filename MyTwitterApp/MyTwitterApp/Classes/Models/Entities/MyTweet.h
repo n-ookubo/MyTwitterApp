@@ -19,5 +19,9 @@
 
 @property (strong, nonatomic) MyTweet *retweet;
 
+@property (copy, nonatomic) NSString *mediaUrl;
+@property (copy, nonatomic) NSNumber *mediaWidth;
+@property (copy, nonatomic) NSNumber *mediaHeight;
+
 - (NSDate *)createdDate;
 @end
