@@ -180,9 +180,6 @@ const CGFloat kTweetJointCellHeight = 40;
     kTimelineObjectType type = [self.timelineService getObjectTypeAtIndex:indexPath.row];
     if (type == kTimelineObjectTweet) {
         MyTweet *tweet = [self.timelineService getTweetAtIndex:indexPath.row];
-        if (tweet.retweet) {
-            tweet = tweet.retweet;
-        }
         return [TweetCell heightForCellWithTweet:tweet withCellWidth:tableView.frame.size.width];
     } else if (type == kTimelineObjectJoint){
         return kTweetJointCellHeight;
