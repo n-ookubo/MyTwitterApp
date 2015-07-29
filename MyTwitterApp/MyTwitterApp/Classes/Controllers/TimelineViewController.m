@@ -68,6 +68,8 @@ const CGFloat kTweetJointCellHeight = 40;
     }
     
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"戻る" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(startEditNewTweet)];
+    self.navigationController.toolbarHidden = YES;
     
     UINib *tweetCellNib = [UINib nibWithNibName:(NSString *)kTweetCellNibName bundle:nil];
     [self.tableView registerNib:tweetCellNib forCellReuseIdentifier:(NSString *)kTweetCellReuseIdentifier];
@@ -78,27 +80,20 @@ const CGFloat kTweetJointCellHeight = 40;
     [refreshControl addTarget:self action:@selector(startRefresh) forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refreshControl;
     
-    __block TimelineViewController *weakSelf = self;
-    self.waitingResponse = [self.timelineService loadRecentTweetWithHandler:^(NSUInteger startIndex, NSUInteger length, NSError *error) {
-        if (!weakSelf) {
-            return;
-        }
-        
-        weakSelf.waitingResponse = NO;
-        
-        if (error) {
-            return;
-        }
-        
-        //dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.tableView reloadData];
-        //});
-    }];
+    self.waitingResponse = NO;
+    [refreshControl beginRefreshing];
+    [self.tableView setContentOffset:CGPointMake(0, -refreshControl.frame.size.height) animated:YES];
+    [self startRefresh];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    self.navigationController.toolbarHidden = YES;
 }
 
 - (void)startRefresh
@@ -134,6 +129,11 @@ const CGFloat kTweetJointCellHeight = 40;
     if (!self.waitingResponse) {
         [weakSelf.refreshControl endRefreshing];
     }
+}
+
+- (void)startEditNewTweet
+{
+    [self performSegueWithIdentifier:@"ShowTweetEditFromTImeline" sender:self];
 }
 
 - (void)showActionSheetWithURLString:(NSString *)urlString

@@ -21,7 +21,7 @@ const NSString *kHomeTimelineApiUrlString = @"https://api.twitter.com/1.1/status
 const NSString *kUserTimelineApiUrlString = @"https://api.twitter.com/1.1/statuses/user_timeline.json";
 const NSString *kUserLookupApiUrlString = @"https://api.twitter.com/1.1/users/lookup.json";
 
-const NSTimeInterval kHomeTimelineApiRateLimit = 60.0;
+const NSTimeInterval kHomeTimelineApiRateLimit = 30.0; //60.0
 const NSTimeInterval kUserTimelineApiRateLimit = 5.0;
 const NSTimeInterval kUserLookupApiRateLimit = 5.0;
 
@@ -141,8 +141,16 @@ const NSTimeInterval kUserLookupApiRateLimit = 5.0;
     
     SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:method URL:[NSURL URLWithString:(NSString *)urlString] parameters:param];
     request.account = self.account;
+    
+    __block APIService *weakSelf = self;
+    void (^completionHandler)(NSData *data, NSHTTPURLResponse *response, NSError *error) = ^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+        if (!error) {
+            [weakSelf.lastAccessed setObject:[NSDate date] forKey:urlString];
+        }
+        handler(data, response, error);
+    };
                           
-    [[ConnectionService sharedService] addDataTaskWithRequest:[request preparedURLRequest] completionHandler:handler];
+    [[ConnectionService sharedService] addDataTaskWithRequest:[request preparedURLRequest] completionHandler:completionHandler];
     return YES;
 }
 

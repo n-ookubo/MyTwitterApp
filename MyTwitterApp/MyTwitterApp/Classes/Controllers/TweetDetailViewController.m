@@ -9,6 +9,7 @@
 #import "TweetDetailViewController.h"
 #import "AppDelegate.h"
 #import "TweetCell.h"
+#import "TweetEditViewController.h"
 
 @interface TweetDetailViewController ()
 @property (weak, nonatomic) TwitterService *twitterService;
@@ -34,7 +35,15 @@ const NSString *kTweetLargeCellReuseIdentifier = @"tweetCellLarge";
         self.twitterService = twitterService;
         self.userCache = twitterService.apiService.userCache;
     }
-
+    
+    self.title = @"ツイート";
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"戻る" style:UIBarButtonItemStylePlain target:nil action:nil];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(startEditNewTweet)];
+    UIBarButtonItem *replyButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemReply target:self action:@selector(startEditReplyTweet)];
+    UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    self.toolbarItems = @[replyButton, space];
+    self.navigationController.toolbarHidden = NO;
+    
     UINib *tweetCellNib = [UINib nibWithNibName:(NSString *)kTweetLargeCellNibName bundle:nil];
     [self.tableView registerNib:tweetCellNib forCellReuseIdentifier:(NSString *)kTweetLargeCellReuseIdentifier];
 }
@@ -42,6 +51,21 @@ const NSString *kTweetLargeCellReuseIdentifier = @"tweetCellLarge";
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    self.navigationController.toolbarHidden = NO;
+}
+
+- (void)startEditNewTweet
+{
+    [self performSegueWithIdentifier:@"ShowTweetEditFromTweetDetail" sender:self];
+}
+
+-(void)startEditReplyTweet
+{
+    [self performSegueWithIdentifier:@"ShowTweetEditFromTweetDetailAsReply" sender:self];
 }
 
 - (void)showActionSheetWithURLString:(NSString *)urlString
@@ -126,14 +150,18 @@ const NSString *kTweetLargeCellReuseIdentifier = @"tweetCellLarge";
         [self showActionSheetWithURLString:urlString];
     }
 }
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"ShowTweetEditFromTweetDetailAsReply"]) {
+        TweetEditViewController *controller = [segue destinationViewController];
+        controller.replyTweet = self.selfTweet;
+    }
 }
-*/
+
 
 @end

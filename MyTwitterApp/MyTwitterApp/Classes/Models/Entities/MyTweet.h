@@ -24,4 +24,5 @@
 @property (copy, nonatomic) NSNumber *mediaHeight;
 
 - (NSDate *)createdDate;
+- (NSString *)mentionsForReply;
 @end

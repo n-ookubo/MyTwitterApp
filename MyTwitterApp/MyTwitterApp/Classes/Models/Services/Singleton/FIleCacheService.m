@@ -241,6 +241,8 @@ static NSString *serviceCachesDirectoryUrlString = nil;
         return nil;
     }
     
+    NSLog(@"readCache: %@", urlString);
+    
     NSData *data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:urlString]];
     return [NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
@@ -250,8 +252,9 @@ static NSString *serviceCachesDirectoryUrlString = nil;
         return;
     }
     
+    NSLog(@"writeCache: %@", urlString);
+    
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:dataArray];
-    NSError *error;
     [data writeToURL:[NSURL URLWithString:urlString] atomically:YES];
 }
 - (BOOL)isExistCacheFileWithName:(NSString *)name group:(NSString *)groupName

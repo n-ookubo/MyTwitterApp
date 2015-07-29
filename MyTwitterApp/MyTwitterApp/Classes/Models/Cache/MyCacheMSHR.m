@@ -14,7 +14,6 @@
     NSString *entryKey;
     NSMutableDictionary *dictionaryHandlers;
     MyCacheMissCancelHandler cancelHandler;
-    dispatch_queue_t myCacheQueue;
 }
 
 @end
@@ -61,7 +60,7 @@
         [dictionaryHandlers removeObjectForKey:ownerIdentifier];
         if (dictionaryHandlers.count == 0 && cancelHandler) {
             NSString *key = entryKey;
-            dispatch_async(myCacheQueue, ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
                 cancelHandler(key);
             });
         }

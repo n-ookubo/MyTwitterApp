@@ -66,6 +66,21 @@ const NSString *kMediaLoadingSize = @"medium";
     return [formatter dateFromString:_createdDateString];
 }
 
+- (NSString *)mentionsForReply
+{
+    NSMutableString *str = [[NSMutableString alloc] init];
+    
+    NSArray *userMentions = [self.entities objectForKey:@"user_mentions"];
+    if (userMentions.count > 0) {
+        for (NSDictionary *entity in userMentions) {
+            NSString *screenName = [entity objectForKey:@"screen_name"];
+            [str appendString:[NSString stringWithFormat:@"@%@ ", screenName]];
+        }
+    }
+    
+    return str;
+}
+
 - (NSString *)description
 {
     NSDictionary *dic = @{@"tweetId" : _tweetId, @"userId" : _userId, @"createdDate" : [self createdDate], @"text" : _text};

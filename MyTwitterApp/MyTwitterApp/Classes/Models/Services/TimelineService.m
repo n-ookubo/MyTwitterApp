@@ -18,7 +18,7 @@
 @end
 
 @implementation TimelineService
-const NSUInteger kLoadingTweetCountAtOnce = 50;
+const NSUInteger kLoadingTweetCountAtOnce = 100;//50;
 const NSUInteger kMaximumBackupTweetCount = 500;
 
 const NSString *kTimelineCacheGroupName = @"timelines";

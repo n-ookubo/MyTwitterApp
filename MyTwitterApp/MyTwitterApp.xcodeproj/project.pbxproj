@@ -42,6 +42,7 @@
 		6983DD151B65F1D600B1761F /* TweetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6983DD141B65F1D600B1761F /* TweetCell.m */; };
 		6983DD171B66323A00B1761F /* TweetJoint.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6983DD161B66323A00B1761F /* TweetJoint.xib */; };
 		6983DD1A1B66335000B1761F /* TweetJointCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6983DD191B66335000B1761F /* TweetJointCell.m */; };
+		698523BE1B68562F0013F6DE /* TweetEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 698523BD1B68562F0013F6DE /* TweetEditViewController.m */; };
 		69FECE0A1B67355A00C69756 /* MyCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 69FECE091B67355A00C69756 /* MyCache.m */; };
 /* End PBXBuildFile section */
 
@@ -121,6 +122,8 @@
 		6983DD161B66323A00B1761F /* TweetJoint.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TweetJoint.xib; sourceTree = "<group>"; };
 		6983DD181B66335000B1761F /* TweetJointCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetJointCell.h; sourceTree = "<group>"; };
 		6983DD191B66335000B1761F /* TweetJointCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetJointCell.m; sourceTree = "<group>"; };
+		698523BC1B68562F0013F6DE /* TweetEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetEditViewController.h; sourceTree = "<group>"; };
+		698523BD1B68562F0013F6DE /* TweetEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetEditViewController.m; sourceTree = "<group>"; };
 		69FECE091B67355A00C69756 /* MyCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -224,6 +227,8 @@
 				690722741B6536A70038DE58 /* TimelineViewController.m */,
 				6968C37A1B677B2300312DEB /* TweetDetailViewController.h */,
 				6968C37B1B677B2300312DEB /* TweetDetailViewController.m */,
+				698523BC1B68562F0013F6DE /* TweetEditViewController.h */,
+				698523BD1B68562F0013F6DE /* TweetEditViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -497,6 +502,7 @@
 				690722591B652ED40038DE58 /* FIleCacheService.m in Sources */,
 				6907225C1B652ED40038DE58 /* NSString+MD5.m in Sources */,
 				6907225D1B652ED40038DE58 /* NSString+NSLog.m in Sources */,
+				698523BE1B68562F0013F6DE /* TweetEditViewController.m in Sources */,
 				690722511B652ED40038DE58 /* MyCacheMSHR.m in Sources */,
 				690721FC1B652D7F0038DE58 /* main.m in Sources */,
 				690722781B6538C10038DE58 /* AccountViewController.m in Sources */,

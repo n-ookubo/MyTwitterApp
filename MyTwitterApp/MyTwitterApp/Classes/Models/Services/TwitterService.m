@@ -16,6 +16,29 @@
 @end
 
 @implementation TwitterService
++ (NSUInteger)countTweetLength:(NSString *)str
+{
+    if (!str) {
+        return 0;
+    }
+    
+    NSUInteger count = str.length;
+    
+    NSDataDetector *detector = [[NSDataDetector alloc] initWithTypes:NSTextCheckingTypeLink error:nil];
+    NSArray *matches = [detector matchesInString:str options:0 range:NSMakeRange(0, [str length])];
+    for (NSTextCheckingResult *result in matches) {
+        NSString *urlString = [result.URL absoluteString];
+        NSUInteger baseCount = result.range.length;
+        if ([urlString hasPrefix:@"http://"]) {
+            baseCount = 22;
+        } else if ([urlString hasPrefix:@"https://"]) {
+            baseCount = 23;
+        }
+        count += (baseCount - result.range.length);
+    }
+    return count;
+}
+
 - (instancetype)init
 {
     [NSException raise:NSGenericException format:@"init is not available. use [[%@ alloc] %@] instead.", NSStringFromClass(self.class), NSStringFromSelector(@selector(initWithAccount:))];

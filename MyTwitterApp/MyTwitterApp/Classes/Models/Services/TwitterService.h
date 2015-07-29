@@ -16,6 +16,8 @@
 @property (readonly, strong) APIService *apiService;
 @property (readonly, strong) TimelineService *homeTimeline;
 
++ (NSUInteger)countTweetLength:(NSString *)str;
+
 - (instancetype) __unavailable init;
 - (instancetype)initWithAccount:(ACAccount *)account;
 - (instancetype)resumeFromStorage;

@@ -39,7 +39,7 @@ static const CGFloat kTweetLargeCellContentFontSize = 16.0;
 {
     const CGFloat profileImageSize = 48;
     const CGFloat margin = 8;
-    const CGFloat nameHeight = 17;
+    const CGFloat nameHeight = 18;
     
     const CGFloat contentXMargin = margin + profileImageSize + margin + margin;
     const CGFloat contentYMargin = margin + nameHeight + margin/2 + nameHeight + margin/2 + margin + nameHeight + margin;
