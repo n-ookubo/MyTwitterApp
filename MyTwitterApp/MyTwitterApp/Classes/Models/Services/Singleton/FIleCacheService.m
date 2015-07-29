@@ -91,7 +91,7 @@ static NSString *serviceCachesDirectoryUrlString = nil;
     return self;
 }
 
-- (NSTimeInterval)expiresInHours
+- (NSTimeInterval)imageCacheExpiresInHours
 {
     return intervalExpiresIn;
 }
@@ -178,7 +178,7 @@ static NSString *serviceCachesDirectoryUrlString = nil;
     return @{@"image" : imageDictionary, @"cost" : costDictionary};
 }
 
-- (NSString *)setData:(NSData *)data forGroup:(NSString *)groupName asUrlString:(NSString *)urlString
+- (NSString *)setImageCacheData:(NSData *)data forGroup:(NSString *)groupName asUrlString:(NSString *)urlString
 {
     if (!data || !groupName || !urlString) {
         return nil;
@@ -205,7 +205,7 @@ static NSString *serviceCachesDirectoryUrlString = nil;
     return nil;
 }
 
-- (void)removeFileWithName:(NSString *)name group:(NSString *)groupName
+- (void)removeImageCacheFileWithName:(NSString *)name group:(NSString *)groupName
 {
     if (!name || !groupName) {
         return;
@@ -227,6 +227,54 @@ static NSString *serviceCachesDirectoryUrlString = nil;
         }
     }
     [rootDictionaryLock unlock];
+}
+
+- (void)createCacheFileDirectoryWithGroupName:(NSString *)groupName
+{
+    NSURL *directoryURL = [NSURL URLWithString:[self.class urlStringWithName:nil group:groupName]];
+    NSError *error = nil;
+    [[NSFileManager defaultManager] createDirectoryAtURL:directoryURL withIntermediateDirectories:YES attributes:nil error:&error];
+}
+- (id)readCacheFileFromURLString:(NSString *)urlString
+{
+    if (!urlString) {
+        return nil;
+    }
+    
+    NSData *data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:urlString]];
+    return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+- (void)writeCacheFileToURLString:(NSString *)urlString array:(NSArray *)dataArray
+{
+    if (!urlString || !dataArray) {
+        return;
+    }
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:dataArray];
+    NSError *error;
+    [data writeToURL:[NSURL URLWithString:urlString] atomically:YES];
+}
+- (BOOL)isExistCacheFileWithName:(NSString *)name group:(NSString *)groupName
+{
+    if (!name || !groupName) {
+        return NO;
+    }
+    
+    NSURL *fileURL = [NSURL URLWithString:[self.class urlStringWithName:name group:groupName]];
+    return [[NSFileManager defaultManager] fileExistsAtPath:fileURL.path];
+}
+- (void)removeCacheFileWithName:(NSString *)name group:(NSString *)groupName
+{
+    if (!name || !groupName) {
+        return;
+    }
+    
+    NSURL *fileURL = [NSURL URLWithString:[self.class urlStringWithName:name group:groupName]];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if ([manager fileExistsAtPath:fileURL.path]) {
+        NSError *error = nil;
+        [manager removeItemAtURL:fileURL error:&error];
+    }
 }
 
 @end

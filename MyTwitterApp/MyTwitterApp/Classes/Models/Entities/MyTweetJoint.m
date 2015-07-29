@@ -9,10 +9,22 @@
 #import "MyTweetJoint.h"
 
 @implementation MyTweetJoint
++ (BOOL)isSuitableForJoint:(NSDictionary *)dic
+{
+    return (dic && [[dic objectForKey:@"id_str"] isEqualToString:@"joint"]);
+}
 
 - (instancetype)initFrom:(NSString *)from to:(NSString *)to
 {
-    self = [super init];
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] initWithDictionary:@{@"id_str" : @"joint"}];
+    if (from) {
+        [dic setObject:from forKey:@"from"];
+    }
+    if (to) {
+        [dic setObject:to forKey:@"to"];
+    }
+    
+    self = [super initWithDictionary:dic];
     if (self) {
         self.from = from;
         self.to = to;

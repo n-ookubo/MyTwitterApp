@@ -106,39 +106,74 @@
     }
 }
 
-- (void)prefetchWithKeys:(NSArray *)keys forceReloading:(BOOL)reloading completion:(void (^)(void))handler
+- (void)prefetchWithKeys:(NSArray *)keys forceReloading:(BOOL)reloading completion:(MyCachePrefetchCompletionHandler)handler
 {
     if (!keys) {
         return;
     }
     
+    NSMutableDictionary *completionDictionary = [[NSMutableDictionary alloc] init];
+    NSLock *completionDictionaryLock = [[NSLock alloc] init];
+    
     NSMutableArray *uncachedKeys = [[NSMutableArray alloc] init];
     for (NSString *key in keys) {
-        if(reloading || ![cache objectForKey:key]) {
+        id obj = [cache objectForKey:key];
+        if(reloading || !obj) {
             [uncachedKeys addObject:key];
+        } else {
+            [completionDictionary setObject:[obj cachedValue] forKey:key];
         }
     }
     
     [mshrLock lock];
     NSMutableArray *unRequestedKeys = [[NSMutableArray alloc] init];
+    NSMutableArray *alreadyRequestedMSHRs = [[NSMutableArray alloc] init];
     for (NSString *key in uncachedKeys) {
-        if (![mshrDictionary objectForKey:key]) {
+        MyCacheMSHR *mshr = [mshrDictionary objectForKey:key];
+        if (!mshr) {
             MyCacheMSHR *mshr = [[MyCacheMSHR alloc] initWithKey:key cancelHandler:missCancelHandler queue:myCacheDispatchQueue];
             [mshrDictionary setValue:mshr forKey:key];
             [unRequestedKeys addObject:key];
+        } else {
+            [alreadyRequestedMSHRs addObject:mshr];
         }
     }
     
+    dispatch_semaphore_t waitingSemaphore = dispatch_semaphore_create(1 - alreadyRequestedMSHRs.count);
+    
+    if (alreadyRequestedMSHRs.count > 0) {
+        for (MyCacheMSHR *mshr in alreadyRequestedMSHRs) {
+            [mshr addHandler:^(NSString *key, id value, NSError *error) {
+                [completionDictionaryLock lock];
+                [completionDictionary setObject:value forKey:key];
+                [completionDictionaryLock unlock];
+                dispatch_semaphore_signal(waitingSemaphore);
+            } owner:self];
+        }
+    }
+    
+    MyCachePrefetchCompletionHandler completionHandler = [handler copy];
     if (unRequestedKeys.count > 0) {
-        void (^completionHandler)() = [handler copy];
         dispatch_async(myCacheDispatchQueue, ^{
             requestHandler(unRequestedKeys, ^(NSDictionary *values, NSDictionary *costs, NSDictionary *errors) {
                 [self handleMissResponseHandlerWithKeys:unRequestedKeys values:values costs:costs errors:errors];
+                dispatch_semaphore_wait(waitingSemaphore, DISPATCH_TIME_FOREVER);
+                dispatch_semaphore_signal(waitingSemaphore);
                 if (completionHandler) {
-                    dispatch_async(dispatch_get_main_queue(), completionHandler);
+                    [completionDictionaryLock lock];
+                    [completionDictionary addEntriesFromDictionary:values]; //merge dic
+                    [completionDictionaryLock unlock];
+
+                    dispatch_async(dispatch_get_main_queue(), ^() {
+                        completionHandler(completionDictionary);
+                    });
                 }
             });
         });
+    } else {
+        dispatch_semaphore_wait(waitingSemaphore, DISPATCH_TIME_FOREVER);
+        completionHandler(completionDictionary);
+        dispatch_semaphore_signal(waitingSemaphore);
     }
     [mshrLock unlock];
     

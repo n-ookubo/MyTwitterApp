@@ -45,7 +45,7 @@
         if (cacheGroupName) {
             storedInFile = YES;
             groupName = cacheGroupName;
-            fileName = [[FileCacheService sharedService] setData:data forGroup:cacheGroupName asUrlString:url];
+            fileName = [[FileCacheService sharedService] setImageCacheData:data forGroup:cacheGroupName asUrlString:url];
             if (!fileName) {
                 return nil;
             }
@@ -86,7 +86,7 @@
     NSTimeInterval interval = [now timeIntervalSinceDate:loadedAt];
     NSTimeInterval elapsedHours = interval / 3600;
     
-    NSTimeInterval expiresIn = [[FileCacheService sharedService] expiresInHours];
+    NSTimeInterval expiresIn = [[FileCacheService sharedService] imageCacheExpiresInHours];
     if (elapsedHours > expiresIn) {
         // expired
         [self discard];
@@ -96,7 +96,7 @@
 - (void) discard
 {
     if (storedInFile) {
-        [[FileCacheService sharedService] removeFileWithName:fileName group:groupName];
+        [[FileCacheService sharedService] removeImageCacheFileWithName:fileName group:groupName];
     } else {
         imageData = nil;
     }

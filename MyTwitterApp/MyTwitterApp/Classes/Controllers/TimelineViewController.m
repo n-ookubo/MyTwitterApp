@@ -10,8 +10,12 @@
 #import "AppDelegate.h"
 #import "TweetCell.h"
 #import "TweetJointCell.h"
+#import "TweetDetailViewController.h"
 
 @interface TimelineViewController ()
+{
+    MyTweet *tweetForSegue;
+}
 @property (weak, nonatomic) TwitterService *twitterService;
 @property (weak, nonatomic) MyCache *userCache;
 @property (assign, atomic) BOOL waitingResponse;
@@ -20,6 +24,7 @@
 
 @implementation TimelineViewController
 const NSString *kTweetCellNibName = @"TweetCellSmall";
+//const NSString *kTweetCellNibName = @"TweetCellLarge";
 const NSString *kTweetJointNibName = @"TweetJoint";
 const NSString *kTweetCellReuseIdentifier = @"tweetCell";
 const NSString *kTweetJointReuseIdentifier = @"tweetJoint";
@@ -62,6 +67,8 @@ const CGFloat kTweetJointCellHeight = 40;
         self.title = @"ホーム";
     }
     
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"戻る" style:UIBarButtonItemStylePlain target:nil action:nil];
+    
     UINib *tweetCellNib = [UINib nibWithNibName:(NSString *)kTweetCellNibName bundle:nil];
     [self.tableView registerNib:tweetCellNib forCellReuseIdentifier:(NSString *)kTweetCellReuseIdentifier];
     UINib *tweetJointNib = [UINib nibWithNibName:(NSString *)kTweetJointNibName bundle:nil];
@@ -83,9 +90,9 @@ const CGFloat kTweetJointCellHeight = 40;
             return;
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        //dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.tableView reloadData];
-        });
+        //});
     }];
 }
 
@@ -103,7 +110,7 @@ const CGFloat kTweetJointCellHeight = 40;
     
     __block TimelineViewController *weakSelf = self;
     self.waitingResponse = [self.timelineService loadRecentTweetWithHandler:^(NSUInteger startIndex, NSUInteger length, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        //dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
                 [weakSelf.refreshControl endRefreshing];
                 return;
@@ -120,7 +127,7 @@ const CGFloat kTweetJointCellHeight = 40;
             }
             
             [weakSelf.refreshControl endRefreshing];
-        });
+        //});
         weakSelf.waitingResponse = NO;
     }];
     
@@ -181,6 +188,7 @@ const CGFloat kTweetJointCellHeight = 40;
     if (type == kTimelineObjectTweet) {
         MyTweet *tweet = [self.timelineService getTweetAtIndex:indexPath.row];
         return [TweetCell heightForCellWithTweet:tweet withCellWidth:tableView.frame.size.width];
+        //return [TweetCell heightForLargeCellWithTweet:tweet withCellWidth:tableView.frame.size.width];
     } else if (type == kTimelineObjectJoint){
         return kTweetJointCellHeight;
     }
@@ -241,6 +249,8 @@ const CGFloat kTweetJointCellHeight = 40;
     
     kTimelineObjectType type = [self.timelineService getObjectTypeAtIndex:indexPath.row];
     if (type == kTimelineObjectTweet) {
+        tweetForSegue = [self.timelineService getTweetAtIndex:indexPath.row];
+        [self performSegueWithIdentifier:@"ShowTweetDetail" sender:self];
         NSLog(@"%@", [self.timelineService getTweetAtIndex:indexPath.row].dictionary);
     } else if (type == kTimelineObjectJoint){
         TweetJointCell *cell = (TweetJointCell *)[tableView cellForRowAtIndexPath:indexPath];
@@ -249,10 +259,10 @@ const CGFloat kTweetJointCellHeight = 40;
             [cell startAnimating];
             self.waitingResponse = [self.timelineService loadJointAtIndex:indexPath.row completion:^(NSUInteger startIndex, NSUInteger length, NSError *error) {
                 self.waitingResponse = NO;
-                dispatch_async(dispatch_get_main_queue(), ^{
+                //dispatch_async(dispatch_get_main_queue(), ^{
                     [cell endAnimating];
                     [self.tableView reloadData];
-                });
+                //});
             }];
             if (!self.waitingResponse) {
                 [cell endAnimating];
@@ -270,14 +280,17 @@ const CGFloat kTweetJointCellHeight = 40;
     }
 }
 
-/*
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
+    
+    if ([segue.identifier isEqualToString:@"ShowTweetDetail"]) {
+        TweetDetailViewController *controller = [segue destinationViewController];
+        controller.selfTweet = tweetForSegue;
+    }
 }
-*/
 
 @end

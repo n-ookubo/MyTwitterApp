@@ -24,6 +24,7 @@ typedef void(^TimelineServiceLoadCompletionHandler) (NSUInteger startIndex, NSUI
 
 - (instancetype) __unavailable init;
 - (instancetype)initWithAPIService:(APIService *)service timelineUserId:(NSString *)userId;
+- (instancetype)resumeFromCache;
 
 - (NSUInteger)count;
 - (kTimelineObjectType)getObjectTypeAtIndex:(NSUInteger)index;

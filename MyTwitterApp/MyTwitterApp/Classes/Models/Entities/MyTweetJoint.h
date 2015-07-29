@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MyTwitterObj.h"
 
-@interface MyTweetJoint : NSObject
+@interface MyTweetJoint : MyTwitterObj
 @property (copy) NSString *from;
 @property (copy) NSString *to;
+
++ (BOOL)isSuitableForJoint:(NSDictionary *)dic;
 
 - (instancetype)initFrom:(NSString *)from to:(NSString *)to;
 @end

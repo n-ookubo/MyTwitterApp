@@ -14,10 +14,14 @@
 + (void)setExpiresInHours:(NSTimeInterval)hours;
 + (NSString *)urlStringWithName:(NSString *)name group:(NSString *)groupName;
 
-- (NSTimeInterval)expiresInHours;
+- (void)createCacheFileDirectoryWithGroupName:(NSString *)groupName;
+- (id)readCacheFileFromURLString:(NSString *)urlString;
+- (void)writeCacheFileToURLString:(NSString *)urlString array:(NSArray *)dataArray;
+- (BOOL)isExistCacheFileWithName:(NSString *)name group:(NSString *)groupName;
+- (void)removeCacheFileWithName:(NSString *)name group:(NSString *)groupName;
 
+- (NSTimeInterval)imageCacheExpiresInHours;
 - (NSDictionary *)loadStoredImageDictionaryWithGroupName:(NSString *)groupName;
-
-- (NSString *)setData:(NSData *)data forGroup:(NSString *)groupName asUrlString:(NSString *)urlString;
-- (void)removeFileWithName:(NSString *)name group:(NSString *)groupName;
+- (NSString *)setImageCacheData:(NSData *)data forGroup:(NSString *)groupName asUrlString:(NSString *)urlString;
+- (void)removeImageCacheFileWithName:(NSString *)name group:(NSString *)groupName;
 @end

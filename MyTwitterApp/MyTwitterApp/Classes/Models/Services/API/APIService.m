@@ -7,6 +7,7 @@
 //
 
 #import "APIService.h"
+#import "MyCache+User.h"
 
 @interface APIService ()
 @property (weak, readwrite) ACAccount *account;
@@ -90,7 +91,7 @@ const NSTimeInterval kUserLookupApiRateLimit = 5.0;
         }
         
         self.account = account;
-        self.userCache = [self createUserCache];
+        self.userCache = [[self createUserCache] resumeFromCache:account];
         self.lastAccessed = [[NSMutableDictionary alloc] init];
     }
     return self;
@@ -192,7 +193,7 @@ const NSTimeInterval kUserLookupApiRateLimit = 5.0;
             NSMutableArray *tweetArray = [APIService parseTweetArrayWithData:data userset:&userSet error:&errorForHandler];
             if (!errorForHandler && tweetArray && userSet) {
                 if (userSet.count > 0) {
-                    [weakSelf.userCache prefetchWithKeys:[userSet allObjects] forceReloading:YES completion:^{
+                    [weakSelf.userCache prefetchWithKeys:[userSet allObjects] forceReloading:YES completion:^(NSDictionary *dictionary) {
                         handler(tweetArray, errorForHandler);
                     }];
                 } else {

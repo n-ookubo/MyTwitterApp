@@ -15,7 +15,6 @@
 		690722161B652D7F0038DE58 /* MyTwitterAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 690722151B652D7F0038DE58 /* MyTwitterAppTests.m */; };
 		6907224E1B652ED40038DE58 /* ImageWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 690722251B652ED40038DE58 /* ImageWrapper.m */; };
 		6907224F1B652ED40038DE58 /* MyImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 690722271B652ED40038DE58 /* MyImageCache.m */; };
-		690722501B652ED40038DE58 /* MyCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 690722291B652ED40038DE58 /* MyCache.m */; };
 		690722511B652ED40038DE58 /* MyCacheMSHR.m in Sources */ = {isa = PBXBuildFile; fileRef = 6907222C1B652ED40038DE58 /* MyCacheMSHR.m */; };
 		690722521B652ED40038DE58 /* MyTweet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6907222F1B652ED40038DE58 /* MyTweet.m */; };
 		690722531B652ED40038DE58 /* MyTweetJoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 690722311B652ED40038DE58 /* MyTweetJoint.m */; };
@@ -36,10 +35,14 @@
 		690722691B6530750038DE58 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 690722681B6530750038DE58 /* CoreText.framework */; };
 		690722751B6536A70038DE58 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 690722741B6536A70038DE58 /* TimelineViewController.m */; };
 		690722781B6538C10038DE58 /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 690722771B6538C10038DE58 /* AccountViewController.m */; };
+		6968C3771B67672700312DEB /* MyCache+User.m in Sources */ = {isa = PBXBuildFile; fileRef = 6968C3761B67672700312DEB /* MyCache+User.m */; };
+		6968C3791B676C9900312DEB /* TweetCellLarge.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6968C3781B676C9900312DEB /* TweetCellLarge.xib */; };
+		6968C37C1B677B2300312DEB /* TweetDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6968C37B1B677B2300312DEB /* TweetDetailViewController.m */; };
 		6983DD121B65DC5900B1761F /* TweetCellSmall.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6983DD111B65DC5900B1761F /* TweetCellSmall.xib */; };
 		6983DD151B65F1D600B1761F /* TweetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6983DD141B65F1D600B1761F /* TweetCell.m */; };
 		6983DD171B66323A00B1761F /* TweetJoint.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6983DD161B66323A00B1761F /* TweetJoint.xib */; };
 		6983DD1A1B66335000B1761F /* TweetJointCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6983DD191B66335000B1761F /* TweetJointCell.m */; };
+		69FECE0A1B67355A00C69756 /* MyCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 69FECE091B67355A00C69756 /* MyCache.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,7 +72,6 @@
 		690722261B652ED40038DE58 /* MyImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyImageCache.h; sourceTree = "<group>"; };
 		690722271B652ED40038DE58 /* MyImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyImageCache.m; sourceTree = "<group>"; };
 		690722281B652ED40038DE58 /* MyCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCache.h; sourceTree = "<group>"; };
-		690722291B652ED40038DE58 /* MyCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCache.m; sourceTree = "<group>"; };
 		6907222A1B652ED40038DE58 /* MyCacheContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCacheContent.h; sourceTree = "<group>"; };
 		6907222B1B652ED40038DE58 /* MyCacheMSHR.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCacheMSHR.h; sourceTree = "<group>"; };
 		6907222C1B652ED40038DE58 /* MyCacheMSHR.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCacheMSHR.m; sourceTree = "<group>"; };
@@ -108,12 +110,18 @@
 		690722741B6536A70038DE58 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
 		690722761B6538C10038DE58 /* AccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountViewController.h; sourceTree = "<group>"; };
 		690722771B6538C10038DE58 /* AccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountViewController.m; sourceTree = "<group>"; };
+		6968C3751B67672700312DEB /* MyCache+User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MyCache+User.h"; path = "User/MyCache+User.h"; sourceTree = "<group>"; };
+		6968C3761B67672700312DEB /* MyCache+User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MyCache+User.m"; path = "User/MyCache+User.m"; sourceTree = "<group>"; };
+		6968C3781B676C9900312DEB /* TweetCellLarge.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TweetCellLarge.xib; sourceTree = "<group>"; };
+		6968C37A1B677B2300312DEB /* TweetDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetDetailViewController.h; sourceTree = "<group>"; };
+		6968C37B1B677B2300312DEB /* TweetDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetDetailViewController.m; sourceTree = "<group>"; };
 		6983DD111B65DC5900B1761F /* TweetCellSmall.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TweetCellSmall.xib; sourceTree = "<group>"; };
 		6983DD131B65F1D600B1761F /* TweetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetCell.h; sourceTree = "<group>"; };
 		6983DD141B65F1D600B1761F /* TweetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetCell.m; sourceTree = "<group>"; };
 		6983DD161B66323A00B1761F /* TweetJoint.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TweetJoint.xib; sourceTree = "<group>"; };
 		6983DD181B66335000B1761F /* TweetJointCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetJointCell.h; sourceTree = "<group>"; };
 		6983DD191B66335000B1761F /* TweetJointCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetJointCell.m; sourceTree = "<group>"; };
+		69FECE091B67355A00C69756 /* MyCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -214,6 +222,8 @@
 				690721FE1B652D7F0038DE58 /* AppDelegate.m */,
 				690722731B6536A70038DE58 /* TimelineViewController.h */,
 				690722741B6536A70038DE58 /* TimelineViewController.m */,
+				6968C37A1B677B2300312DEB /* TweetDetailViewController.h */,
+				6968C37B1B677B2300312DEB /* TweetDetailViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -233,8 +243,9 @@
 			isa = PBXGroup;
 			children = (
 				690722231B652ED40038DE58 /* Image */,
+				6968C3741B6766F500312DEB /* User */,
 				690722281B652ED40038DE58 /* MyCache.h */,
-				690722291B652ED40038DE58 /* MyCache.m */,
+				69FECE091B67355A00C69756 /* MyCache.m */,
 				6907222A1B652ED40038DE58 /* MyCacheContent.h */,
 				6907222B1B652ED40038DE58 /* MyCacheMSHR.h */,
 				6907222C1B652ED40038DE58 /* MyCacheMSHR.m */,
@@ -321,6 +332,7 @@
 				690722031B652D7F0038DE58 /* Main.storyboard */,
 				690722081B652D7F0038DE58 /* LaunchScreen.xib */,
 				6983DD111B65DC5900B1761F /* TweetCellSmall.xib */,
+				6968C3781B676C9900312DEB /* TweetCellLarge.xib */,
 				6983DD131B65F1D600B1761F /* TweetCell.h */,
 				6983DD141B65F1D600B1761F /* TweetCell.m */,
 				6983DD161B66323A00B1761F /* TweetJoint.xib */,
@@ -354,6 +366,15 @@
 				690722621B6530300038DE58 /* TTTAttributedLabel.m */,
 			);
 			path = TTTAttributedLabel;
+			sourceTree = "<group>";
+		};
+		6968C3741B6766F500312DEB /* User */ = {
+			isa = PBXGroup;
+			children = (
+				6968C3751B67672700312DEB /* MyCache+User.h */,
+				6968C3761B67672700312DEB /* MyCache+User.m */,
+			);
+			name = User;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -439,6 +460,7 @@
 				690722051B652D7F0038DE58 /* Main.storyboard in Resources */,
 				6983DD121B65DC5900B1761F /* TweetCellSmall.xib in Resources */,
 				6907220A1B652D7F0038DE58 /* LaunchScreen.xib in Resources */,
+				6968C3791B676C9900312DEB /* TweetCellLarge.xib in Resources */,
 				690722071B652D7F0038DE58 /* Images.xcassets in Resources */,
 				6983DD171B66323A00B1761F /* TweetJoint.xib in Resources */,
 			);
@@ -458,18 +480,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				690722501B652ED40038DE58 /* MyCache.m in Sources */,
 				6907225E1B652ED40038DE58 /* UIImageView+MyImageCache.m in Sources */,
 				6983DD151B65F1D600B1761F /* TweetCell.m in Sources */,
+				6968C3771B67672700312DEB /* MyCache+User.m in Sources */,
 				690722571B652ED40038DE58 /* AccountService.m in Sources */,
 				6907224E1B652ED40038DE58 /* ImageWrapper.m in Sources */,
 				6907225A1B652ED40038DE58 /* TimelineService.m in Sources */,
 				690722521B652ED40038DE58 /* MyTweet.m in Sources */,
+				69FECE0A1B67355A00C69756 /* MyCache.m in Sources */,
 				690722551B652ED40038DE58 /* MyUser.m in Sources */,
 				690721FF1B652D7F0038DE58 /* AppDelegate.m in Sources */,
 				690722561B652ED40038DE58 /* APIService.m in Sources */,
 				690722531B652ED40038DE58 /* MyTweetJoint.m in Sources */,
 				690722581B652ED40038DE58 /* ConnectionService.m in Sources */,
+				6968C37C1B677B2300312DEB /* TweetDetailViewController.m in Sources */,
 				690722591B652ED40038DE58 /* FIleCacheService.m in Sources */,
 				6907225C1B652ED40038DE58 /* NSString+MD5.m in Sources */,
 				6907225D1B652ED40038DE58 /* NSString+NSLog.m in Sources */,

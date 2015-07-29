@@ -14,11 +14,13 @@ typedef void (^MyCacheMissResponseHandler)(NSDictionary *values, NSDictionary *c
 ///
 typedef void (^MyCacheMissRequestHandler)(NSArray *keys, MyCacheMissResponseHandler handler);
 
+typedef void (^MyCachePrefetchCompletionHandler)(NSDictionary *dictionary);
+
 @interface MyCache : NSObject<NSCacheDelegate>
 
 - (instancetype) __unavailable init;
 - (instancetype)initWithHandler:(MyCacheMissRequestHandler)handler cancelHandler:(MyCacheMissCancelHandler)cancelHandler countLimit:(NSNumber *)countLimit totalCostLimit:(NSNumber *)totalCostLimit;
 - (void)lookupWithKey:(NSString *)key owner:(id)owner handler:(MyCacheDataHandler)handler;
 - (void)cancelLookupWithKey:(NSString *)key owner:(id)owner;
-- (void)prefetchWithKeys:(NSArray *)keys forceReloading:(BOOL)reloading completion:(void (^)(void))handler;
+- (void)prefetchWithKeys:(NSArray *)keys forceReloading:(BOOL)reloading completion:(MyCachePrefetchCompletionHandler)handler;
 @end

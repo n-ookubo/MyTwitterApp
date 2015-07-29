@@ -32,7 +32,8 @@
         
         self.account = account;
         self.apiService = [[APIService alloc] initWithAccount:account];
-        self.homeTimeline = [[TimelineService alloc] initWithAPIService:self.apiService timelineUserId:nil];
+        //self.apiService.userCache
+        self.homeTimeline = [[[TimelineService alloc] initWithAPIService:self.apiService timelineUserId:nil] resumeFromCache];
     }
     return self;
 }
