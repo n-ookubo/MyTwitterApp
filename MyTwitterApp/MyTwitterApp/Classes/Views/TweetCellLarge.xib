@@ -14,7 +14,7 @@
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JqW-vR-Bpa" id="E8x-Ny-tIp">
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="@screennameaaaaaaa" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O0b-VA-7fk">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" ambiguous="YES" text="@screennameaaaaaaa" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O0b-VA-7fk">
                         <rect key="frame" x="64" y="30" width="240" height="15"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="48" id="nSZ-81-MPN"/>
@@ -28,7 +28,7 @@
                             </mask>
                         </variation>
                     </label>
-                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pIW-NZ-AUY" customClass="TTTAttributedLabel">
+                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" lineBreakMode="characterWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pIW-NZ-AUY" customClass="TTTAttributedLabel">
                         <rect key="frame" x="64" y="49" width="248" height="20"/>
                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -39,23 +39,23 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fBr-3D-zHy">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fBr-3D-zHy">
                         <rect key="frame" x="8" y="8" width="48" height="48"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="48" id="TSM-pC-pbq"/>
                             <constraint firstAttribute="height" constant="48" id="ceu-Yr-xgw"/>
                         </constraints>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UmR-mw-RU0">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UmR-mw-RU0">
                         <rect key="frame" x="64" y="77" width="248" height="1"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="UmR-mw-RU0" secondAttribute="height" multiplier="248:1" id="Cy3-uC-iRq"/>
                         </constraints>
                     </imageView>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nKx-ns-SR4">
+                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nKx-ns-SR4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="0.0"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ユーザー名さんがリツイート" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L9k-DR-icp">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ユーザー名さんがリツイート" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L9k-DR-icp">
                                 <rect key="frame" x="64" y="-15" width="248" height="15"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <color key="textColor" red="0.20000000000000001" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -63,20 +63,14 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="L9k-DR-icp" secondAttribute="trailing" constant="8" id="WdF-xP-24L"/>
-                            <constraint firstAttribute="bottom" secondItem="L9k-DR-icp" secondAttribute="bottom" id="hR3-xj-sJL"/>
-                            <constraint firstAttribute="height" id="rHJ-wL-L9N"/>
-                            <constraint firstItem="L9k-DR-icp" firstAttribute="leading" secondItem="nKx-ns-SR4" secondAttribute="leading" constant="64" id="yaG-5i-RbX"/>
-                        </constraints>
                     </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ユーザー名aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e25-FV-EyQ">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="ユーザー名aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e25-FV-EyQ">
                         <rect key="frame" x="64" y="8" width="240" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2bW-lD-X74">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2bW-lD-X74">
                         <rect key="frame" x="64" y="86" width="248" height="17"/>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -105,6 +99,11 @@
                     <constraint firstAttribute="trailing" secondItem="UmR-mw-RU0" secondAttribute="trailing" constant="8" id="u3f-qm-Qf8"/>
                     <constraint firstItem="2bW-lD-X74" firstAttribute="leading" secondItem="fBr-3D-zHy" secondAttribute="trailing" constant="8" id="xQD-dY-RIT"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="TMx-ti-Jts"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="contentLabel" destination="pIW-NZ-AUY" id="m9h-L6-DTW"/>
@@ -114,7 +113,6 @@
                 <outlet property="profileImageView" destination="fBr-3D-zHy" id="FRd-dm-n7q"/>
                 <outlet property="retweetLabel" destination="L9k-DR-icp" id="qUk-re-8Ob"/>
                 <outlet property="retweetView" destination="nKx-ns-SR4" id="TLR-xu-V5z"/>
-                <outlet property="retweetViewHeightConstraint" destination="rHJ-wL-L9N" id="0gT-JL-9dB"/>
                 <outlet property="screenNameLabel" destination="O0b-VA-7fk" id="roU-6D-lrE"/>
                 <outlet property="tweetImageAspectRatioConstraint" destination="Cy3-uC-iRq" id="VRK-kF-eYz"/>
                 <outlet property="tweetImageView" destination="UmR-mw-RU0" id="xGL-dW-Bfo"/>

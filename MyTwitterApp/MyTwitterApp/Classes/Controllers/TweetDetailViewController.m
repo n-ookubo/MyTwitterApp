@@ -143,6 +143,13 @@ const NSString *kTweetLargeCellReuseIdentifier = @"tweetCellLarge";
 }
 */
 
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
+
 #pragma mark - TTTAtributedLabelDelegate
 - (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url {
     NSString *urlString = [TweetCell parseLabelLinkURL:url];
@@ -157,8 +164,12 @@ const NSString *kTweetLargeCellReuseIdentifier = @"tweetCellLarge";
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
-    if ([segue.identifier isEqualToString:@"ShowTweetEditFromTweetDetailAsReply"]) {
+    if ([segue.identifier isEqualToString:@"ShowTweetEditFromTweetDetail"]) {
         TweetEditViewController *controller = [segue destinationViewController];
+        controller.parentTimeline = self.parentTimeline;
+    } else if ([segue.identifier isEqualToString:@"ShowTweetEditFromTweetDetailAsReply"]) {
+        TweetEditViewController *controller = [segue destinationViewController];
+        controller.parentTimeline = self.parentTimeline;
         controller.replyTweet = self.selfTweet;
     }
 }

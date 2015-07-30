@@ -81,9 +81,7 @@ const CGFloat kTweetJointCellHeight = 40;
     self.refreshControl = refreshControl;
     
     self.waitingResponse = NO;
-    [refreshControl beginRefreshing];
-    [self.tableView setContentOffset:CGPointMake(0, -refreshControl.frame.size.height) animated:YES];
-    [self startRefresh];
+    [self startRefreshingTimelineManually];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -96,6 +94,13 @@ const CGFloat kTweetJointCellHeight = 40;
     self.navigationController.toolbarHidden = YES;
 }
 
+- (void)startRefreshingTimelineManually
+{
+    [self.refreshControl beginRefreshing];
+    [self.tableView setContentOffset:CGPointMake(0, -self.refreshControl.frame.size.height) animated:YES];
+    [self startRefresh];
+}
+
 - (void)startRefresh
 {
     if (!self.timelineService || self.waitingResponse) {
@@ -105,8 +110,10 @@ const CGFloat kTweetJointCellHeight = 40;
     
     __block TimelineViewController *weakSelf = self;
     self.waitingResponse = [self.timelineService loadRecentTweetWithHandler:^(NSUInteger startIndex, NSUInteger length, NSError *error) {
+        weakSelf.waitingResponse = NO;
         //dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
+                NSLog(@"%@", error);
                 [weakSelf.refreshControl endRefreshing];
                 return;
             }
@@ -123,7 +130,6 @@ const CGFloat kTweetJointCellHeight = 40;
             
             [weakSelf.refreshControl endRefreshing];
         //});
-        weakSelf.waitingResponse = NO;
     }];
     
     if (!self.waitingResponse) {
@@ -134,6 +140,14 @@ const CGFloat kTweetJointCellHeight = 40;
 - (void)startEditNewTweet
 {
     [self performSegueWithIdentifier:@"ShowTweetEditFromTImeline" sender:self];
+}
+
+- (IBAction)didNewTweetComplete:(UIStoryboardSegue *)segue
+{
+    UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"送信完了" message:@"ツイートの投稿が完了しました。" preferredStyle:UIAlertControllerStyleAlert];
+    [controller addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:controller animated:YES completion:nil];
+    [self startRefreshingTimelineManually];
 }
 
 - (void)showActionSheetWithURLString:(NSString *)urlString
@@ -289,6 +303,7 @@ const CGFloat kTweetJointCellHeight = 40;
     
     if ([segue.identifier isEqualToString:@"ShowTweetDetail"]) {
         TweetDetailViewController *controller = [segue destinationViewController];
+        controller.parentTimeline = self;
         controller.selfTweet = tweetForSegue;
     }
 }

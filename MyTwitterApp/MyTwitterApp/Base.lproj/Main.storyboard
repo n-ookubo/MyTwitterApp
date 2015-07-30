@@ -170,14 +170,16 @@
                     <connections>
                         <outlet property="lengthLabel" destination="4hX-2G-zTp" id="Huw-2c-IlV"/>
                         <outlet property="textView" destination="9jc-rV-gjv" id="TEc-ye-D0i"/>
+                        <segue destination="HQC-LZ-hlK" kind="unwind" identifier="didNewTweetComplete" unwindAction="didNewTweetComplete:" id="ln8-n5-0AA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vme-Rn-XyD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="HQC-LZ-hlK" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1833" y="1779"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="grq-Du-8Lv"/>
+        <segue reference="hqf-st-VdA"/>
     </inferredMetricsTieBreakers>
 </document>

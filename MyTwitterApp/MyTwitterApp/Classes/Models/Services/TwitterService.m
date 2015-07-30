@@ -39,6 +39,11 @@
     return count;
 }
 
++ (BOOL)isNotEmptyStringAsTweet:(NSString *)str
+{
+    return str && ([str stringByReplacingOccurrencesOfString:@" " withString:@""].length > 0);
+}
+
 - (instancetype)init
 {
     [NSException raise:NSGenericException format:@"init is not available. use [[%@ alloc] %@] instead.", NSStringFromClass(self.class), NSStringFromSelector(@selector(initWithAccount:))];

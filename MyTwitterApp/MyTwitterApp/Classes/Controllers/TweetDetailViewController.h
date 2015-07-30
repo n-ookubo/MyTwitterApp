@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TimelineViewController.h"
 #import "MyTweet.h"
 #import "TTTAttributedLabel.h"
 
 @interface TweetDetailViewController : UITableViewController<TTTAttributedLabelDelegate>
+@property (weak, nonatomic) TimelineViewController *parentTimeline;
 @property (strong, nonatomic) MyTweet *selfTweet;
 
 @end

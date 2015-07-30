@@ -14,8 +14,8 @@
 @property (weak, nonatomic) MyImageCache *tweetImageCache;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tweetImageAspectRatioConstraint;
 @property (weak, nonatomic) IBOutlet UIView *retweetView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *retweetViewHeightConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *retweetLabelTopMarginContstraint;
+//@property (weak, nonatomic) IBOutlet NSLayoutConstraint *retweetViewHeightConstraint;
+//@property (weak, nonatomic) IBOutlet NSLayoutConstraint *retweetLabelTopMarginContstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *largeTimeTopMarginConstraint;
 
 @end
@@ -201,7 +201,15 @@ static const CGFloat kTweetLargeCellContentFontSize = 16.0;
             formatter.timeStyle = kCFDateFormatterLongStyle;
 
             weakSelf.largeTimeLabel.text = [formatter stringFromDate:[tw createdDate]];
-            [weakSelf removeConstraint:weakSelf.largeTimeTopMarginConstraint];
+            
+            NSArray *constraints = weakSelf.constraints;
+            for (NSLayoutConstraint *constraint in constraints) {
+                if ((constraint.firstItem == weakSelf.largeTimeLabel && constraint.firstAttribute == NSLayoutAttributeTop) ||
+                    (constraint.secondItem == weakSelf.largeTimeLabel && constraint.secondAttribute == NSLayoutAttributeTop)) {
+                    [weakSelf removeConstraint:constraint];
+                }
+            }
+            //[weakSelf removeConstraint:weakSelf.largeTimeTopMarginConstraint];
             weakSelf.largeTimeTopMarginConstraint = [NSLayoutConstraint constraintWithItem:weakSelf.largeTimeLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:weakSelf.tweetImageView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:tw.mediaUrl ? 8 : 0];
             [weakSelf addConstraint:weakSelf.largeTimeTopMarginConstraint];
         }
@@ -216,25 +224,44 @@ static const CGFloat kTweetLargeCellContentFontSize = 16.0;
                     weakSelf.retweetLabel.text = [NSString stringWithFormat:@"%@さんがリツイート", parentUser.name];
                 }
             }];
+            /*
+             "<NSLayoutConstraint:0x7fe6027fb540 H:[UILabel:0x7fe6027faf40]-(8)-|   (Names: '|':UIView:0x7fe6027fae10 )>",
+             "<NSLayoutConstraint:0x7fe6027fb590 V:[UILabel:0x7fe6027faf40]-(0)-|   (Names: '|':UIView:0x7fe6027fae10 )>",
+             "<NSLayoutConstraint:0x7fe6027fb5e0 H:|-(64)-[UILabel:0x7fe6027faf40]   (Names: '|':UIView:0x7fe6027fae10 )>",
+             */
+            [weakSelf.retweetView removeConstraints:weakSelf.retweetView.constraints];
+            [weakSelf.retweetView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-64-[label]-8-|" options:0 metrics:nil views:@{@"label" : weakSelf.retweetLabel}]];
+            [weakSelf.retweetView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-8-[label]-0-|" options:0 metrics:nil views:@{@"label" : weakSelf.retweetLabel}]];
+            /*
             if (weakSelf.retweetViewHeightConstraint) {
-                [weakSelf.retweetView removeConstraint:weakSelf.retweetViewHeightConstraint];
+                [weakSelf removeConstraint:weakSelf.retweetViewHeightConstraint];
                 weakSelf.retweetViewHeightConstraint = nil;
             }
             if (!weakSelf.retweetLabelTopMarginContstraint) {
                 weakSelf.retweetLabelTopMarginContstraint = [NSLayoutConstraint constraintWithItem:weakSelf.retweetLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:weakSelf.retweetView attribute:NSLayoutAttributeTop multiplier:1.0 constant:8.0];
                 [weakSelf.retweetView addConstraint:weakSelf.retweetLabelTopMarginContstraint];
             }
+            */
         } else {
             weakSelf.retweetView.hidden = YES;
             weakSelf.retweetLabel.text = @"";
+            [weakSelf.retweetView removeConstraints:weakSelf.retweetView.constraints];
+            [weakSelf.retweetView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view(0)]" options:0 metrics:nil views:@{@"view" : weakSelf.retweetView}]];
+            /*
             if (!weakSelf.retweetViewHeightConstraint) {
                 weakSelf.retweetViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.retweetView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0];
-                [weakSelf.retweetView addConstraint:weakSelf.retweetViewHeightConstraint];
+                [weakSelf addConstraint:weakSelf.retweetViewHeightConstraint];
             }
             if (weakSelf.retweetLabelTopMarginContstraint) {
                 [weakSelf.retweetView removeConstraint:weakSelf.retweetLabelTopMarginContstraint];
                 weakSelf.retweetLabelTopMarginContstraint = nil;
             }
+             */
+        }
+        
+        NSArray *constraints = weakSelf.retweetView.constraints;
+        if (NO) {
+            NSLog(@"%@", constraints);
         }
         
         UIImageView *img = weakSelf.tweetImageView;
@@ -307,14 +334,8 @@ static const CGFloat kTweetLargeCellContentFontSize = 16.0;
 {
     self.retweetView.hidden = YES;
     self.retweetLabel.text = @"";
-    if (!self.retweetViewHeightConstraint) {
-        self.retweetViewHeightConstraint = [NSLayoutConstraint constraintWithItem:self.retweetView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0];
-        [self.retweetView addConstraint:self.retweetViewHeightConstraint];
-    }
-    if (self.retweetLabelTopMarginContstraint) {
-        [self.retweetView removeConstraint:self.retweetLabelTopMarginContstraint];
-        self.retweetLabelTopMarginContstraint = nil;
-    }
+    [self.retweetView removeConstraints:self.retweetView.constraints];
+    [self.retweetView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[view(0)]" options:0 metrics:nil views:@{@"view" : self.retweetView}]];
     
     [self.profileImageView setImageCache:nil];
     [self.profileImageView setViewImageWithURLString:nil];

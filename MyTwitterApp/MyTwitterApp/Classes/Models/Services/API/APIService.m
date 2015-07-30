@@ -20,33 +20,50 @@
 const NSString *kHomeTimelineApiUrlString = @"https://api.twitter.com/1.1/statuses/home_timeline.json";
 const NSString *kUserTimelineApiUrlString = @"https://api.twitter.com/1.1/statuses/user_timeline.json";
 const NSString *kUserLookupApiUrlString = @"https://api.twitter.com/1.1/users/lookup.json";
+const NSString *kUpdateTweetApiUrlString = @"https://api.twitter.com/1.1/statuses/update.json";
 
 const NSTimeInterval kHomeTimelineApiRateLimit = 30.0; //60.0
 const NSTimeInterval kUserTimelineApiRateLimit = 5.0;
 const NSTimeInterval kUserLookupApiRateLimit = 5.0;
+const NSTimeInterval kUpdateTweetApiRateLimit = 36.0;
 
 + (NSMutableArray *)parseTweetArrayWithData:(NSData *)data userset:(NSMutableSet **)set error:(NSError **)error
 {
-    NSArray *parsedArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:error];
+    id parsedData = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:error];
     if (!*error) {
         NSMutableArray *tweetArray = [[NSMutableArray alloc] init];
         NSMutableSet *userSet = [[NSMutableSet alloc] init];
-        for (NSDictionary *dic in parsedArray) {
-            MyTweet *tweet = [[MyTweet alloc] initWithDictionary:dic];
-            [tweetArray addObject:tweet];
-            
-            //NSDictionary *user = [dic objectForKey:@"user"];
-            //NSString *userId = [user objectForKey:@"id_str"];
-            [userSet addObject:tweet.userId];
-            if (tweet.retweet) {
-                [userSet addObject:tweet.retweet.userId];
+        
+        if ([parsedData isKindOfClass:[NSArray class]]) {
+            for (NSDictionary *dic in parsedData) {
+                MyTweet *tweet = [[MyTweet alloc] initWithDictionary:dic];
+                [tweetArray addObject:[self.class parseTweetWithDictionary:dic userset:&userSet]];
             }
+        } else if ([parsedData isKindOfClass:[NSDictionary class]]) {
+            [tweetArray addObject:[self.class parseTweetWithDictionary:parsedData userset:&userSet]];
+        } else {
+            // wtf
         }
-        *error = nil;
-        *set = userSet;
+        
+        if (error) {
+            *error = nil;
+        }
+        if (set) {
+            *set = userSet;
+        }
         return tweetArray;
     }
     return nil;
+}
+
++ (MyTweet *)parseTweetWithDictionary:(NSDictionary *)dic userset:(NSMutableSet **)set
+{
+    MyTweet *tweet = [[MyTweet alloc] initWithDictionary:dic];
+    [*set addObject:tweet.userId];
+    if (tweet.retweet) {
+        [*set addObject:tweet.retweet.userId];
+    }
+    return tweet;
 }
 
 + (NSMutableArray *)parseUserArrayWithData:(NSData *)data error:(NSError **)error
@@ -242,6 +259,27 @@ const NSTimeInterval kUserLookupApiRateLimit = 5.0;
             resultArray = [APIService parseUserArrayWithData:data error:&errorForHandler];
         }
         
+        handler(resultArray, errorForHandler);
+    }];
+}
+
+- (BOOL)sendTweet:(NSString *)body replyTo:(NSString *)tweetId completion:(APIServiceResponseHandler)handler
+{
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:body forKey:@"status"];
+    if (tweetId) {
+        [dic setObject:tweetId forKey:@"in_reply_to_status_id"];
+    }
+    return [self accessToApiWithUrlString:kUpdateTweetApiUrlString method:SLRequestMethodPOST param:dic limitSeconds:kUpdateTweetApiRateLimit completionHandler:^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+        NSArray *resultArray = nil;
+        NSError *errorForHandler = nil;
+        if (error) {
+            errorForHandler = error;
+        } else if (response.statusCode < 200 || response.statusCode >= 300 ) {
+            errorForHandler = [ConnectionService createErrorWithHttpStatus:response.statusCode];
+        } else {
+            resultArray = [APIService parseTweetArrayWithData:data userset:nil error:&errorForHandler];
+        }
         handler(resultArray, errorForHandler);
     }];
 }

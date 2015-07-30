@@ -12,6 +12,7 @@
 @interface TweetEditViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet UILabel *lengthLabel;
+@property (weak, nonatomic) UIBarButtonItem *doneButton;
 
 @end
 
@@ -20,28 +21,34 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(sendTweet)];
+    UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(sendTweet)];
+    self.navigationItem.rightBarButtonItem = button;
+    self.doneButton = button;
     self.navigationController.toolbarHidden = YES;
     self.title = self.replyTweet ? @"ツイートに返信" : @"新規ツイート";
     
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [center addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [center addObserver:self selector:@selector(keyboardDidShow:) name:UIKeyboardDidShowNotification object:nil];
+    [center addObserver:self selector:@selector(keyboardDidChangeFrame:) name:UIKeyboardDidChangeFrameNotification object:nil];
+    [center addObserver:self selector:@selector(keyboardDidHide:) name:UIKeyboardDidHideNotification object:nil];
     
     self.textView.text = @"";
     if (self.replyTweet) {
         __block TweetEditViewController *weakSelf = self;
         AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-        [delegate.twitterService.apiService.userCache lookupWithKey:self.replyTweet.userId owner:self handler:^(NSString *key, id value, NSError *error) {
+        [[delegate.twitterService apiService].userCache lookupWithKey:self.replyTweet.userId owner:self handler:^(NSString *key, id value, NSError *error) {
             if (error) {
                 weakSelf.textView.text = @"";
             } else {
                 MyUser *user = value;
-                weakSelf.textView.text = [NSString stringWithFormat:@"@%@ %@", user.screenName, [weakSelf.replyTweet mentionsForReply]];
+                weakSelf.textView.text = [NSString stringWithFormat:@"@%@ %@", user.screenName, [weakSelf.replyTweet mentionsForReplyTo:user.screenName self:[delegate.twitterService account].username]];
+                [self updateLengthLabel:[TwitterService countTweetLength:[self textView].text]];
+                [self.doneButton setEnabled:[TwitterService isNotEmptyStringAsTweet:[self textView].text]];
             }
         }];
     }
-    [self updateLengthLabel:self.textView.text.length];
+    [self updateLengthLabel:[TwitterService countTweetLength:[self textView].text]];
+    [self.doneButton setEnabled:[TwitterService isNotEmptyStringAsTweet:[self textView].text]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -59,7 +66,6 @@
 {
     [self.textView resignFirstResponder];
     UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"送信中" message:nil preferredStyle:UIAlertControllerStyleAlert];
-    
     UIViewController *alertCC = [[UIViewController alloc] init];
     alertCC.view.backgroundColor = [UIColor clearColor];
     
@@ -72,6 +78,41 @@
     
     [indicator startAnimating];
     [self presentViewController:controller animated:YES completion:nil];
+    
+    __block TweetEditViewController *weakSelf = self;
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    [[delegate twitterService].apiService sendTweet:self.textView.text replyTo:[self.replyTweet tweetId] completion:^(NSArray *result, NSError *error) {
+        [indicator stopAnimating];
+        
+        if (error) {
+        NSString *message = nil;
+            if ([error.domain isEqualToString:NSURLErrorDomain]) {
+                switch (error.code) {
+                    case NSURLErrorNotConnectedToInternet:
+                        message = @"インターネットに接続されていません。"; break;
+                    case NSURLErrorTimedOut:
+                        message = @"タイムアウトしました。"; break;
+                    case NSURLErrorCancelled:
+                        return; // メッセージを出さない
+                    default:
+                        message = error.localizedDescription;
+                        break;
+                }
+            }
+            [controller dismissViewControllerAnimated:YES completion:^{
+                UIAlertController *resultController = [UIAlertController alertControllerWithTitle:@"エラー" message:message preferredStyle:UIAlertControllerStyleAlert];
+                [resultController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+                [[weakSelf.view window].rootViewController presentViewController:resultController animated:YES completion:nil];
+            }];
+        } else {
+            [controller dismissViewControllerAnimated:YES completion:^{
+                [weakSelf.navigationController popToViewController:self.parentTimeline animated:YES];
+                [weakSelf performSegueWithIdentifier:@"didNewTweetComplete" sender:self];
+            }];
+        }
+        
+    }];
+    
 }
 
 - (void)resizeTextView:(CGRect)keyboardRect
@@ -85,6 +126,7 @@
 {
     long limit = 140;
     self.lengthLabel.text = [NSString stringWithFormat:@"%ld", limit - (long)length];
+    [self.view layoutIfNeeded];
 }
 
 #pragma mark - UITextViewDelegate
@@ -92,8 +134,10 @@
 {
     NSMutableString *str = [textView.text mutableCopy];
     [str replaceCharactersInRange:range withString:text];
-    NSUInteger length = [TwitterService countTweetLength:str];
     
+    [self.doneButton setEnabled:[TwitterService isNotEmptyStringAsTweet:str]];
+    
+    NSUInteger length = [TwitterService countTweetLength:str];
     long limit = 140;
     if (length > limit) {
         return NO;
@@ -104,11 +148,17 @@
 }
 
 #pragma mark - keyboardNotification
-- (void)keyboardWillShow:(NSNotification *)notification
+- (void)keyboardDidShow:(NSNotification *)notification
 {
     [self resizeTextView:[[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue]];
 }
-- (void)keyboardWillHide:(NSNotification *)notification
+
+- (void)keyboardDidChangeFrame:(NSNotification *)notification
+{
+    [self resizeTextView:[[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue]];
+}
+
+- (void)keyboardDidHide:(NSNotification *)notification
 {
     [self resizeTextView:[[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue]];
 }

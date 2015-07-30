@@ -36,4 +36,6 @@ typedef NS_ENUM(NSInteger, kAPIServiceErrorCode) {
 /// fromは含まないが、toは含むことに留意すること！
 - (BOOL)getHomeTimeLineWithCount:(NSUInteger)count rangeFrom:(NSString *)from rangeTo:(NSString *)to completion:(APIServiceResponseHandler)handler;
 - (BOOL)getUserTimeLineWithUserId:(NSString *)userId count:(NSUInteger)count rangeFrom:(NSString *)from rangeTo:(NSString *)to completion:(APIServiceResponseHandler)handler;
+
+- (BOOL)sendTweet:(NSString *)body replyTo:(NSString *)tweetId completion:(APIServiceResponseHandler)handler;
 @end

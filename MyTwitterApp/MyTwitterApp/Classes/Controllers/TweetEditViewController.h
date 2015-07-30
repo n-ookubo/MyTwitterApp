@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TimelineViewController.h"
 #import "MyTweet.h"
 
 @interface TweetEditViewController : UIViewController<UITextViewDelegate>
+@property (weak, nonatomic) TimelineViewController *parentTimeline;
 @property (strong, nonatomic) MyTweet *replyTweet;
 
 @end

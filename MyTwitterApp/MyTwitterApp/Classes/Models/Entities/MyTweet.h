@@ -24,5 +24,5 @@
 @property (copy, nonatomic) NSNumber *mediaHeight;
 
 - (NSDate *)createdDate;
-- (NSString *)mentionsForReply;
+- (NSString *)mentionsForReplyTo:(NSString *)screenName self:(NSString *)selfScreenName;
 @end
