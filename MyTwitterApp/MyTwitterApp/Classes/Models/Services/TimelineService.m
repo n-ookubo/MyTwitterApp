@@ -112,7 +112,7 @@ const NSString *kTimelineCacheGroupName = @"timelines";
     
     NSString *rangeFrom = nil;
     if (self.timelineArray.count > 0) {
-        MyTweet *tweet = [self.timelineArray objectAtIndex:0];
+        MyTweet *tweet = [self.timelineArray firstObject];
         rangeFrom = tweet.tweetId;
     }
     
@@ -133,7 +133,6 @@ const NSString *kTimelineCacheGroupName = @"timelines";
             if (count > 0) {
                 NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(startIndex, count)];
                 [self.timelineArray insertObjects:array atIndexes:indexes];
-                
                 id lastObj = [self.timelineArray lastObject];
                 if ([lastObj isKindOfClass:[MyTweet class]]) {
                     // 末尾にJointを追加
@@ -195,6 +194,7 @@ const NSString *kTimelineCacheGroupName = @"timelines";
             } else {
                 // Jointの維持
                 joint.to = ((MyTweet *)[array lastObject]).tweetId;
+                NSLog(@"joint to %@", [array lastObject]);
             }
             count = array.count;
             NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(startIndex, count)];
@@ -211,11 +211,13 @@ const NSString *kTimelineCacheGroupName = @"timelines";
         });
     };
     
+    NSLog(@"joint: from=%@, to=%@", joint.from, joint.to);
+    
     BOOL requested = NO;
     if (self.timelineUserId) {
         requested =  [self.apiService getUserTimeLineWithUserId:self.timelineUserId count:kLoadingTweetCountAtOnce + 1 rangeFrom:joint.from rangeTo:joint.to completion:apiHandler];
     } else {
-        requested =  [self.apiService getHomeTimeLineWithCount:kLoadingTweetCountAtOnce rangeFrom:joint.from rangeTo:joint.to completion:apiHandler];
+        requested =  [self.apiService getHomeTimeLineWithCount:kLoadingTweetCountAtOnce + 1 rangeFrom:joint.from rangeTo:joint.to completion:apiHandler];
     }
     
     if (!requested) {

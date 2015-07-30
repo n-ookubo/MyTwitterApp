@@ -23,11 +23,18 @@
     if (to) {
         [dic setObject:to forKey:@"to"];
     }
-    
+    return [self initWithDictionary:dic];
+}
+
+- (instancetype)initWithDictionary:(NSDictionary *)dic
+{
     self = [super initWithDictionary:dic];
     if (self) {
-        self.from = from;
-        self.to = to;
+        if (!dic) {
+            return nil;
+        }
+        self.from = [dic objectForKey:@"from"];
+        self.to = [dic objectForKey:@"to"];
     }
     return self;
 }

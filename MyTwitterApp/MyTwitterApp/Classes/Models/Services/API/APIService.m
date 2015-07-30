@@ -36,7 +36,6 @@ const NSTimeInterval kUpdateTweetApiRateLimit = 36.0;
         
         if ([parsedData isKindOfClass:[NSArray class]]) {
             for (NSDictionary *dic in parsedData) {
-                MyTweet *tweet = [[MyTweet alloc] initWithDictionary:dic];
                 [tweetArray addObject:[self.class parseTweetWithDictionary:dic userset:&userSet]];
             }
         } else if ([parsedData isKindOfClass:[NSDictionary class]]) {

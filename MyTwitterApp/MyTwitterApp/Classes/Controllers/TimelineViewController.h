@@ -10,7 +10,12 @@
 #import "TimelineService.h"
 #import "TTTAttributedLabel.h"
 
-@interface TimelineViewController : UITableViewController<TTTAttributedLabelDelegate>
+@protocol TimelineViewControllerDelegate <NSObject>
+- (void)didNewTweetComplete;
+
+@end
+
+@interface TimelineViewController : UITableViewController<TTTAttributedLabelDelegate, TimelineViewControllerDelegate>
 @property (strong, nonatomic) TimelineService *timelineService;
 
 @end

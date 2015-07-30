@@ -259,11 +259,6 @@ static const CGFloat kTweetLargeCellContentFontSize = 16.0;
              */
         }
         
-        NSArray *constraints = weakSelf.retweetView.constraints;
-        if (NO) {
-            NSLog(@"%@", constraints);
-        }
-        
         UIImageView *img = weakSelf.tweetImageView;
         if (tw.mediaUrl) {
             NSLayoutConstraint *newConstraint = [NSLayoutConstraint constraintWithItem:img attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:img attribute:NSLayoutAttributeHeight multiplier:([tw.mediaWidth doubleValue] / [tw.mediaHeight doubleValue]) constant:0];

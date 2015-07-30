@@ -55,6 +55,7 @@ const NSString *kTweetLargeCellReuseIdentifier = @"tweetCellLarge";
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     self.navigationController.toolbarHidden = NO;
 }
 
@@ -75,7 +76,7 @@ const NSString *kTweetLargeCellReuseIdentifier = @"tweetCellLarge";
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
     }]];
     [controller addAction:[UIAlertAction actionWithTitle:@"キャンセル" style:UIAlertActionStyleCancel handler:nil]];
-    [self.view.window.rootViewController presentViewController:controller animated:YES completion:nil];
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 #pragma mark - Table view data source

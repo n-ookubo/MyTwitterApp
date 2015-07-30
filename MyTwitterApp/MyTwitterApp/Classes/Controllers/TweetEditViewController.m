@@ -58,6 +58,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     self.navigationController.toolbarHidden = YES;
     [self.textView becomeFirstResponder];
 }
@@ -77,7 +78,7 @@
     [controller setValue:alertCC forKey:@"contentViewController"];
     
     [indicator startAnimating];
-    [self presentViewController:controller animated:YES completion:nil];
+    [self.navigationController presentViewController:controller animated:YES completion:nil];
     
     __block TweetEditViewController *weakSelf = self;
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
@@ -102,18 +103,18 @@
             [controller dismissViewControllerAnimated:YES completion:^{
                 UIAlertController *resultController = [UIAlertController alertControllerWithTitle:@"エラー" message:message preferredStyle:UIAlertControllerStyleAlert];
                 [resultController addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-                [[weakSelf.view window].rootViewController presentViewController:resultController animated:YES completion:nil];
+                [weakSelf presentViewController:resultController animated:YES completion:nil];
             }];
         } else {
             [controller dismissViewControllerAnimated:YES completion:^{
-                [weakSelf.navigationController popToViewController:self.parentTimeline animated:YES];
-                [weakSelf performSegueWithIdentifier:@"didNewTweetComplete" sender:self];
+                [weakSelf.parentTimeline didNewTweetComplete];
             }];
         }
         
     }];
     
 }
+
 
 - (void)resizeTextView:(CGRect)keyboardRect
 {

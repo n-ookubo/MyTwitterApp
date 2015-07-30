@@ -11,6 +11,7 @@
 #import "TweetCell.h"
 #import "TweetJointCell.h"
 #import "TweetDetailViewController.h"
+#import "TweetEditViewController.h"
 
 @interface TimelineViewController ()
 {
@@ -91,6 +92,7 @@ const CGFloat kTweetJointCellHeight = 40;
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     self.navigationController.toolbarHidden = YES;
 }
 
@@ -142,8 +144,10 @@ const CGFloat kTweetJointCellHeight = 40;
     [self performSegueWithIdentifier:@"ShowTweetEditFromTImeline" sender:self];
 }
 
-- (IBAction)didNewTweetComplete:(UIStoryboardSegue *)segue
+- (void)didNewTweetComplete
 {
+    [self.navigationController popToViewController:self animated:YES];
+    
     UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"送信完了" message:@"ツイートの投稿が完了しました。" preferredStyle:UIAlertControllerStyleAlert];
     [controller addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:controller animated:YES completion:nil];
@@ -157,7 +161,7 @@ const CGFloat kTweetJointCellHeight = 40;
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
     }]];
     [controller addAction:[UIAlertAction actionWithTitle:@"キャンセル" style:UIAlertActionStyleCancel handler:nil]];
-    [self.view.window.rootViewController presentViewController:controller animated:YES completion:nil];
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 #pragma mark - Table view data source
@@ -305,6 +309,9 @@ const CGFloat kTweetJointCellHeight = 40;
         TweetDetailViewController *controller = [segue destinationViewController];
         controller.parentTimeline = self;
         controller.selfTweet = tweetForSegue;
+    } else if ([segue.identifier isEqualToString:@"ShowTweetEditFromTImeline"]) {
+        TweetEditViewController *controller = [segue destinationViewController];
+        controller.parentTimeline = self;
     }
 }
 

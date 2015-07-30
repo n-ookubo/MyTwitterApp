@@ -41,6 +41,7 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
     [self updateAccounts];
 }
 
@@ -68,7 +69,7 @@
     if (message) {
         UIAlertController *controller = [UIAlertController alertControllerWithTitle:@"アカウント取得失敗" message:message preferredStyle:UIAlertControllerStyleAlert];
         [controller addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-        [self.view.window.rootViewController presentViewController:controller animated:YES completion:nil];
+        [self presentViewController:controller animated:YES completion:nil];
     }
 
 }
