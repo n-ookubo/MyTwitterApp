@@ -213,6 +213,7 @@
         }
     }
     
+    self.image = nil;
     [self showPlaceHolder];
     
     if (!urlString) {

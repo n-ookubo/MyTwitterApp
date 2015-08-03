@@ -46,7 +46,7 @@
                             <constraint firstAttribute="height" constant="48" id="ceu-Yr-xgw"/>
                         </constraints>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UmR-mw-RU0">
+                    <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UmR-mw-RU0">
                         <rect key="frame" x="64" y="77" width="248" height="1"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="UmR-mw-RU0" secondAttribute="height" multiplier="248:1" id="Cy3-uC-iRq"/>

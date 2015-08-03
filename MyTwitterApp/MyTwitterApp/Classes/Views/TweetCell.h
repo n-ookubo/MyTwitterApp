@@ -13,6 +13,11 @@
 #import "TTTAttributedLabel.h"
 #import "UIImageView+MyImageCache.h"
 
+@protocol TweetCellDelegate <TTTAttributedLabelDelegate>
+- (void)didTableCellImageViewTap:(UITapGestureRecognizer *)recognizer;
+
+@end
+
 @interface TweetCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
@@ -30,6 +35,6 @@
 + (CGFloat)heightForLargeCellWithTweet:(MyTweet *)tweet withCellWidth:(CGFloat)width;
 + (NSString *)parseLabelLinkURL:(NSURL *)url;
 
-- (void)setDelegate:(id<TTTAttributedLabelDelegate>)delegate;
+- (void)setDelegate:(id<TweetCellDelegate>)delegate tweet:(MyTweet *)tw;
 - (void)setTweet:(MyTweet *)tweet userCache:(MyCache *)userCache;
 @end

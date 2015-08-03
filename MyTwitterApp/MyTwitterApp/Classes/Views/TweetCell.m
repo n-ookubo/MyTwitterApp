@@ -18,6 +18,8 @@
 //@property (weak, nonatomic) IBOutlet NSLayoutConstraint *retweetLabelTopMarginContstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *largeTimeTopMarginConstraint;
 
+@property (weak, nonatomic) UITapGestureRecognizer *tapRecognizer;
+
 @end
 
 @implementation TweetCell
@@ -153,9 +155,22 @@ static const CGFloat kTweetLargeCellContentFontSize = 16.0;
     // Configure the view for the selected state
 }
 
-- (void)setDelegate:(id<TTTAttributedLabelDelegate>)delegate
+- (void)setDelegate:(id<TweetCellDelegate>)delegate tweet:(MyTweet *)tw
 {
     self.contentLabel.delegate = delegate;
+    
+    if (self.tapRecognizer) {
+        [self.tweetImageView removeGestureRecognizer:self.tapRecognizer];
+        self.tapRecognizer = nil;
+    }
+    
+    if (tw.retweet ? tw.retweet.mediaUrl : tw.mediaUrl) {
+        UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:delegate action:@selector(didTableCellImageViewTap:)];
+        [recognizer setNumberOfTapsRequired:1];
+        [recognizer setNumberOfTouchesRequired:1];
+        [self.tweetImageView addGestureRecognizer:recognizer];
+        self.tapRecognizer = recognizer;
+    }
 }
 
 - (void)setTweet:(MyTweet *)tweet userCache:(MyCache *)userCache

@@ -43,6 +43,7 @@
 		6983DD171B66323A00B1761F /* TweetJoint.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6983DD161B66323A00B1761F /* TweetJoint.xib */; };
 		6983DD1A1B66335000B1761F /* TweetJointCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6983DD191B66335000B1761F /* TweetJointCell.m */; };
 		698523BE1B68562F0013F6DE /* TweetEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 698523BD1B68562F0013F6DE /* TweetEditViewController.m */; };
+		69F6B5701B6AED1200B54026 /* ImageScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 69F6B56F1B6AED1200B54026 /* ImageScrollViewController.m */; };
 		69FECE0A1B67355A00C69756 /* MyCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 69FECE091B67355A00C69756 /* MyCache.m */; };
 /* End PBXBuildFile section */
 
@@ -124,6 +125,8 @@
 		6983DD191B66335000B1761F /* TweetJointCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetJointCell.m; sourceTree = "<group>"; };
 		698523BC1B68562F0013F6DE /* TweetEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetEditViewController.h; sourceTree = "<group>"; };
 		698523BD1B68562F0013F6DE /* TweetEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetEditViewController.m; sourceTree = "<group>"; };
+		69F6B56E1B6AED1200B54026 /* ImageScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageScrollViewController.h; sourceTree = "<group>"; };
+		69F6B56F1B6AED1200B54026 /* ImageScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageScrollViewController.m; sourceTree = "<group>"; };
 		69FECE091B67355A00C69756 /* MyCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -229,6 +232,8 @@
 				6968C37B1B677B2300312DEB /* TweetDetailViewController.m */,
 				698523BC1B68562F0013F6DE /* TweetEditViewController.h */,
 				698523BD1B68562F0013F6DE /* TweetEditViewController.m */,
+				69F6B56E1B6AED1200B54026 /* ImageScrollViewController.h */,
+				69F6B56F1B6AED1200B54026 /* ImageScrollViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -488,6 +493,7 @@
 				6907225E1B652ED40038DE58 /* UIImageView+MyImageCache.m in Sources */,
 				6983DD151B65F1D600B1761F /* TweetCell.m in Sources */,
 				6968C3771B67672700312DEB /* MyCache+User.m in Sources */,
+				69F6B5701B6AED1200B54026 /* ImageScrollViewController.m in Sources */,
 				690722571B652ED40038DE58 /* AccountService.m in Sources */,
 				6907224E1B652ED40038DE58 /* ImageWrapper.m in Sources */,
 				6907225A1B652ED40038DE58 /* TimelineService.m in Sources */,

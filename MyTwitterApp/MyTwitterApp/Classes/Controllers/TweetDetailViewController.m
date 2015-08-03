@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "TweetCell.h"
 #import "TweetEditViewController.h"
+#import "ImageScrollViewController.h"
 
 @interface TweetDetailViewController ()
 @property (weak, nonatomic) TwitterService *twitterService;
@@ -97,7 +98,7 @@ const NSString *kTweetLargeCellReuseIdentifier = @"tweetCellLarge";
     
     // Configure the cell...
     [tweetCell setTweet:self.selfTweet userCache:self.userCache];
-    [tweetCell setDelegate:self];
+    [tweetCell setDelegate:self tweet:self.selfTweet];
     
     return tweetCell;
 }
@@ -159,6 +160,15 @@ const NSString *kTweetLargeCellReuseIdentifier = @"tweetCellLarge";
     }
 }
 
+#pragma mark - TweetCellDelegate
+- (void)didTableCellImageViewTap:(UITapGestureRecognizer *)recognizer
+{
+    CGPoint point = [recognizer locationInView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    
+    [self performSegueWithIdentifier:@"StartImageScrollFromDetail" sender:self];
+}
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -172,6 +182,11 @@ const NSString *kTweetLargeCellReuseIdentifier = @"tweetCellLarge";
         TweetEditViewController *controller = [segue destinationViewController];
         controller.parentTimeline = self.parentTimeline;
         controller.replyTweet = self.selfTweet;
+    } else if ([segue.identifier isEqualToString:@"StartImageScrollFromDetail"]) {
+        ImageScrollViewController *controller = [segue destinationViewController];
+        controller.imageUrl = self.selfTweet.mediaUrl;
+        controller.imageWidth = [self.selfTweet.mediaWidth doubleValue];
+        controller.imageHeight = [self.selfTweet.mediaHeight doubleValue];
     }
 }
 

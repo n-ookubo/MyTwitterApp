@@ -32,6 +32,42 @@
             </objects>
             <point key="canvasLocation" x="1138" y="316"/>
         </scene>
+        <!--Image Scroll View Controller-->
+        <scene sceneID="viJ-kB-7KH">
+            <objects>
+                <viewController id="0cV-75-rkp" customClass="ImageScrollViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ApO-cd-yBa"/>
+                        <viewControllerLayoutGuide type="bottom" id="l0M-Ug-rDH"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Aj0-0f-DPb">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ePL-Cc-ITC">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="delegate" destination="0cV-75-rkp" id="d2q-1e-Yab"/>
+                                </connections>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="ePL-Cc-ITC" secondAttribute="bottom" id="8va-LA-Hxs"/>
+                            <constraint firstAttribute="trailing" secondItem="ePL-Cc-ITC" secondAttribute="trailing" id="HRe-e8-ol6"/>
+                            <constraint firstItem="ePL-Cc-ITC" firstAttribute="top" secondItem="Aj0-0f-DPb" secondAttribute="top" id="hPR-Ct-cpA"/>
+                            <constraint firstItem="ePL-Cc-ITC" firstAttribute="leading" secondItem="Aj0-0f-DPb" secondAttribute="leading" id="n6w-zo-Yfg"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="scrollView" destination="ePL-Cc-ITC" id="ytP-fb-95u"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PsZ-Ey-sFp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1830" y="322"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="ssC-us-nLq">
             <objects>
@@ -92,6 +128,7 @@
                     <connections>
                         <segue destination="P5y-9b-pFM" kind="show" identifier="ShowTweetDetail" id="mgy-QF-rQo"/>
                         <segue destination="aRh-V5-1bp" kind="show" identifier="ShowTweetEditFromTImeline" id="hqf-st-VdA"/>
+                        <segue destination="0cV-75-rkp" kind="show" identifier="StartImageScrollFromTimeline" id="FOn-eQ-fmp"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RZy-jP-PQM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -114,6 +151,7 @@
                     <connections>
                         <segue destination="aRh-V5-1bp" kind="show" identifier="ShowTweetEditFromTweetDetail" id="uZG-62-M7o"/>
                         <segue destination="aRh-V5-1bp" kind="show" identifier="ShowTweetEditFromTweetDetailAsReply" id="grq-Du-8Lv"/>
+                        <segue destination="0cV-75-rkp" kind="show" identifier="StartImageScrollFromDetail" id="e54-GE-UXi"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YRm-iE-n9k" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -171,5 +209,6 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="hqf-st-VdA"/>
+        <segue reference="FOn-eQ-fmp"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -12,6 +12,7 @@
 #import "TweetJointCell.h"
 #import "TweetDetailViewController.h"
 #import "TweetEditViewController.h"
+#import "ImageScrollViewController.h"
 
 @interface TimelineViewController ()
 {
@@ -184,7 +185,7 @@ const CGFloat kTweetJointCellHeight = 40;
         TweetCell *tweetCell = [tableView dequeueReusableCellWithIdentifier:(NSString *)kTweetCellReuseIdentifier forIndexPath:indexPath];
         MyTweet *tweet = [self.timelineService getTweetAtIndex:indexPath.row];
         [tweetCell setTweet:tweet userCache:self.userCache];
-        [tweetCell setDelegate:self];
+        [tweetCell setDelegate:self tweet:tweet];
         
         cell = tweetCell;
     } else {
@@ -298,6 +299,16 @@ const CGFloat kTweetJointCellHeight = 40;
     }
 }
 
+#pragma mark - TweetCellDelegate
+- (void)didTableCellImageViewTap:(UITapGestureRecognizer *)recognizer
+{
+    CGPoint point = [recognizer locationInView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:point];
+    tweetForSegue = [self.timelineService getTweetAtIndex:indexPath.row];
+    
+    [self performSegueWithIdentifier:@"StartImageScrollFromTimeline" sender:self];
+}
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -312,6 +323,11 @@ const CGFloat kTweetJointCellHeight = 40;
     } else if ([segue.identifier isEqualToString:@"ShowTweetEditFromTImeline"]) {
         TweetEditViewController *controller = [segue destinationViewController];
         controller.parentTimeline = self;
+    } else if ([segue.identifier isEqualToString:@"StartImageScrollFromTimeline"]) {
+        ImageScrollViewController *controller = [segue destinationViewController];
+        controller.imageUrl = tweetForSegue.mediaUrl;
+        controller.imageWidth = [tweetForSegue.mediaWidth doubleValue];
+        controller.imageHeight = [tweetForSegue.mediaHeight doubleValue];
     }
 }
 
